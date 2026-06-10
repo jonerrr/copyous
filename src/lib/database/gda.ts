@@ -403,9 +403,8 @@ export class GdaDatabase implements Database {
 		return Promise.resolve();
 	}
 
-	public async entries(): Promise<ClipboardEntry[]> {
+	private async getEntriesQuery(offset?: number, limit?: number): Promise<ClipboardEntry[]> {
 		try {
-			// SELECT * FROM clipboard
 			const builder = new this._Gda.SqlBuilder({ stmt_type: this._Gda.SqlStatementType.SELECT });
 			builder.select_add_target('clipboard', null);
 			builder.select_add_field('id', null, null);
@@ -418,6 +417,10 @@ export class GdaDatabase implements Database {
 			builder.select_add_field('title', null, null);
 			builder.select_order_by(datetimeId, false, null);
 
+			if (limit !== undefined && offset !== undefined) {
+				builder.select_set_limit(add_expr_value(builder, limit), add_expr_value(builder, offset));
+			}
+
 			const stmt = builder.get_statement();
 			const dataModel = await async_statement_execute_select<ClipboardEntry>(
 				this._Gda,
@@ -426,52 +429,140 @@ export class GdaDatabase implements Database {
 				this._cancellable,
 			);
 
-			const entries: ClipboardEntry[] = [];
-			const iter = dataModel.create_iter();
-			while (iter.move_next()) {
-				const id = iter.get_value_for_field('id');
-				const type = iter.get_value_for_field('type');
-				const content = unescapeContent(iter.get_value_for_field('content'));
-				const pinned = iter.get_value_for_field('pinned');
-				const tag = iter.get_value_for_field('tag');
-				let datetime = iter.get_value_for_field('datetime');
-				const metadata = iter.get_value_for_field('metadata') as string | null;
-				const title = (iter.get_value_for_field('title') as string | null) ?? '';
-
-				if ('Timestamp' in this._Gda && datetime instanceof this._Gda.Timestamp) {
-					const timezone = GLib.TimeZone.new_offset(datetime.timezone);
-					datetime = GLib.DateTime.new(
-						timezone,
-						datetime.year,
-						datetime.month,
-						datetime.day,
-						datetime.hour,
-						datetime.minute,
-						datetime.second,
-					);
-				}
-
-				let metadataObj: Metadata | null = null;
-				if (metadata) {
-					try {
-						const json = JSON.parse(metadata) as object | null;
-						if (json) {
-							metadataObj = json as Metadata;
-						}
-					} catch {
-						this.ext.logger.error('Failed to parse metadata');
-					}
-				}
-
-				entries.push(new ClipboardEntry(id, type, content, pinned, tag, datetime, metadataObj, title));
-			}
-
-			return entries;
+			return this.parseEntriesFromDataModel(dataModel);
 		} catch (e) {
 			this.ext.logger.error('Failed to get clipboard entries', e);
 		}
 
 		return [];
+	}
+
+	public async entries(): Promise<ClipboardEntry[]> {
+		return this.getEntriesQuery();
+	}
+
+	public async entriesPage(offset: number, limit: number): Promise<ClipboardEntry[]> {
+		return this.getEntriesQuery(offset, limit);
+	}
+
+	public async countEntries(): Promise<number> {
+		try {
+			const [stmt] = this._connection.parse_sql_string('SELECT COUNT(*) AS count FROM clipboard');
+			const dataModel = await async_statement_execute_select<{ count: number }>(
+				this._Gda,
+				this._connection,
+				stmt,
+				this._cancellable,
+			);
+			const iter = dataModel.create_iter();
+			if (iter.move_next()) {
+				return iter.get_value_for_field('count');
+			}
+		} catch (e) {
+			this.ext.logger.error('Failed to count clipboard entries', e);
+		}
+
+		return 0;
+	}
+
+	public async getEntryById(id: number): Promise<ClipboardEntry | null> {
+		try {
+			const builder = new this._Gda.SqlBuilder({ stmt_type: this._Gda.SqlStatementType.SELECT });
+			builder.select_add_target('clipboard', null);
+			builder.select_add_field('id', null, null);
+			builder.select_add_field('type', null, null);
+			builder.select_add_field('content', null, null);
+			builder.select_add_field('pinned', null, null);
+			builder.select_add_field('tag', null, null);
+			builder.select_add_field('datetime', null, null);
+			builder.select_add_field('metadata', null, null);
+			builder.select_add_field('title', null, null);
+			builder.set_where(
+				builder.add_cond(this._Gda.SqlOperatorType.EQ, builder.add_id('id'), add_expr_value(builder, id), 0),
+			);
+			builder.select_set_limit(add_expr_value(builder, 1), add_expr_value(builder, 0));
+
+			const stmt = builder.get_statement();
+			const dataModel = await async_statement_execute_select<ClipboardEntry>(
+				this._Gda,
+				this._connection,
+				stmt,
+				this._cancellable,
+			);
+			const entries = this.parseEntriesFromDataModel(dataModel);
+			return entries[0] ?? null;
+		} catch (e) {
+			this.ext.logger.error(`Failed to get clipboard entry ${id}`, e);
+		}
+
+		return null;
+	}
+
+	public async hasUnprotectedEntriesOlderThan(olderThanMinutes: number): Promise<boolean> {
+		if (olderThanMinutes <= 0) return false;
+
+		try {
+			const [builder] = this.selectToDeleteBuilder(true, olderThanMinutes);
+			builder.select_set_limit(add_expr_value(builder, 1), add_expr_value(builder, 0));
+
+			const stmt = builder.get_statement();
+			const dataModel = await async_statement_execute_select<ClipboardEntry>(
+				this._Gda,
+				this._connection,
+				stmt,
+				this._cancellable,
+			);
+			const iter = dataModel.create_iter();
+			return iter.move_next();
+		} catch (e) {
+			this.ext.logger.error('Failed to check for old clipboard entries', e);
+		}
+
+		return false;
+	}
+
+	private parseEntriesFromDataModel(dataModel: DataModel<ClipboardEntry>): ClipboardEntry[] {
+		const entries: ClipboardEntry[] = [];
+		const iter = dataModel.create_iter();
+		while (iter.move_next()) {
+			const id = iter.get_value_for_field('id');
+			const type = iter.get_value_for_field('type');
+			const content = unescapeContent(iter.get_value_for_field('content'));
+			const pinned = iter.get_value_for_field('pinned');
+			const tag = iter.get_value_for_field('tag');
+			let datetime = iter.get_value_for_field('datetime');
+			const metadata = iter.get_value_for_field('metadata') as string | null;
+			const title = (iter.get_value_for_field('title') as string | null) ?? '';
+
+			if ('Timestamp' in this._Gda && datetime instanceof this._Gda.Timestamp) {
+				const timezone = GLib.TimeZone.new_offset(datetime.timezone);
+				datetime = GLib.DateTime.new(
+					timezone,
+					datetime.year,
+					datetime.month,
+					datetime.day,
+					datetime.hour,
+					datetime.minute,
+					datetime.second,
+				);
+			}
+
+			let metadataObj: Metadata | null = null;
+			if (metadata) {
+				try {
+					const json = JSON.parse(metadata) as object | null;
+					if (json) {
+						metadataObj = json as Metadata;
+					}
+				} catch {
+					this.ext.logger.error('Failed to parse metadata');
+				}
+			}
+
+			entries.push(new ClipboardEntry(id, type, content, pinned, tag, datetime, metadataObj, title));
+		}
+
+		return entries;
 	}
 
 	public async selectConflict(entry: ClipboardEntry | { type: ItemType; content: string }): Promise<number | null> {

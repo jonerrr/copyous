@@ -12,6 +12,7 @@ export class MemoryDatabase implements Database {
 	protected _entries: Map<string, ClipboardEntry> = new Map();
 	protected _keys: Map<number, string> = new Map();
 	protected _id: number = 0;
+	protected _sortedEntries: ClipboardEntry[] | null = null;
 
 	constructor() {}
 
@@ -39,6 +40,7 @@ export class MemoryDatabase implements Database {
 				break;
 		}
 
+		this._sortedEntries = null;
 		return Promise.resolve(deleted);
 	}
 
@@ -47,8 +49,39 @@ export class MemoryDatabase implements Database {
 	}
 
 	public entries(): Promise<ClipboardEntry[]> {
-		const entries = Array.from(this._entries.values()).sort((a, b) => b.datetime.compare(a.datetime));
-		return Promise.resolve(entries);
+		if (this._sortedEntries === null) {
+			this._sortedEntries = Array.from(this._entries.values()).sort((a, b) => b.datetime.compare(a.datetime));
+		}
+		return Promise.resolve(this._sortedEntries);
+	}
+
+	public async entriesPage(offset: number, limit: number): Promise<ClipboardEntry[]> {
+		const entries = await this.entries();
+		return entries.slice(offset, offset + limit);
+	}
+
+	public countEntries(): Promise<number> {
+		return Promise.resolve(this._entries.size);
+	}
+
+	public getEntryById(id: number): Promise<ClipboardEntry | null> {
+		const key = this._keys.get(id);
+		if (!key) return Promise.resolve(null);
+		return Promise.resolve(this._entries.get(key) ?? null);
+	}
+
+	public hasUnprotectedEntriesOlderThan(olderThanMinutes: number): Promise<boolean> {
+		if (olderThanMinutes <= 0) return Promise.resolve(false);
+
+		const now = GLib.DateTime.new_now_utc();
+		const olderThan = now.add_minutes(-olderThanMinutes)!;
+
+		for (const entry of this._entries.values()) {
+			if (entry.pinned || entry.tag) continue;
+			if (entry.datetime.compare(olderThan) < 0) return Promise.resolve(true);
+		}
+
+		return Promise.resolve(false);
 	}
 
 	public selectConflict(entry: ClipboardEntry | { type: ItemType; content: string }): Promise<number | null> {
@@ -73,6 +106,7 @@ export class MemoryDatabase implements Database {
 			);
 			this._entries.set(key, newEntry);
 			this._keys.set(newEntry.id, key);
+			this._sortedEntries = null;
 			return Promise.resolve(newEntry);
 		}
 	}
@@ -81,6 +115,7 @@ export class MemoryDatabase implements Database {
 		entry: ClipboardEntry,
 		property: Exclude<keyof ClipboardEntry, keyof GObject.Object>,
 	): Promise<number> {
+		this._sortedEntries = null;
 		if (property !== 'content') return Promise.resolve(-1);
 
 		const key = this.entryToKey(entry);
@@ -102,6 +137,7 @@ export class MemoryDatabase implements Database {
 		this._keys.delete(entry.id);
 		if (key) {
 			this._entries.delete(key);
+			this._sortedEntries = null;
 			return Promise.resolve(true);
 		}
 
@@ -129,6 +165,10 @@ export class MemoryDatabase implements Database {
 			const key = this._keys.get(id);
 			this._keys.delete(id);
 			if (key) this._entries.delete(key);
+		}
+
+		if (deleted.length > 0) {
+			this._sortedEntries = null;
 		}
 
 		return deleted;

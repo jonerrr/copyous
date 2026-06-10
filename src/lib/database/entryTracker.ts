@@ -27,7 +27,7 @@ export class ClipboardEntryTracker {
 		return true;
 	}
 
-	async init(): Promise<ClipboardEntry[]> {
+	async init(): Promise<void> {
 		if (this._database) {
 			await this.clear();
 			await this.destroy();
@@ -47,53 +47,66 @@ export class ClipboardEntryTracker {
 		// 4. (sqlite)  sqlite backend can be loaded
 		// 5. (json)    json backend can be loaded
 		// 6. fallback to in-memory
-		let entries: ClipboardEntry[] | null = null;
+		let initialized = false;
 		if (backend === DatabaseBackend.Default) {
 			this._fromDefault = true;
 			if (this.ext.settings.get_boolean('in-memory-database')) {
 				this.ext.logger.log('Set default database backend to in-memory');
-				entries = await this.initMemory();
+				initialized = await this.initMemory();
 			} else if (dbFile.query_exists(null)) {
-				entries = await this.initSqlite(dbFile, true);
-				this.ext.settings.set_enum('database-backend', DatabaseBackend.Sqlite);
-				this.ext.logger.log('Set default database backend to SQLite');
+				initialized = await this.initSqlite(dbFile, true);
+				if (initialized) {
+					this.ext.settings.set_enum('database-backend', DatabaseBackend.Sqlite);
+					this.ext.logger.log('Set default database backend to SQLite');
+				}
 			} else if (jsonFile.query_exists(null)) {
-				entries = await this.initJson(jsonFile);
-				this.ext.settings.set_enum('database-backend', DatabaseBackend.Json);
-				this.ext.logger.log('Set default database backend to JSON');
+				initialized = await this.initJson(jsonFile);
+				if (initialized) {
+					this.ext.settings.set_enum('database-backend', DatabaseBackend.Json);
+					this.ext.logger.log('Set default database backend to JSON');
+				}
 			} else {
-				entries = await this.initSqlite(dbFile, false);
-				if (entries !== null) {
+				initialized = await this.initSqlite(dbFile, false);
+				if (initialized) {
 					this.ext.settings.set_enum('database-backend', DatabaseBackend.Sqlite);
 					this.ext.logger.log('Set default database backend to SQLite');
 				} else {
-					entries = await this.initJson(jsonFile);
-					if (entries !== null) {
+					initialized = await this.initJson(jsonFile);
+					if (initialized) {
 						this.ext.settings.set_enum('database-backend', DatabaseBackend.Json);
 						this.ext.logger.log('Set default database backend to JSON');
 					} else {
-						entries = await this.initMemory();
+						initialized = await this.initMemory();
 						this.ext.settings.set_enum('database-backend', DatabaseBackend.Memory);
 						this.ext.logger.log('Set default database backend to in-memory');
 					}
 				}
 			}
 		} else if (backend === DatabaseBackend.Sqlite) {
-			entries = await this.initSqlite(dbFile, true);
+			initialized = await this.initSqlite(dbFile, true);
 		} else if (backend === DatabaseBackend.Json) {
-			entries = await this.initJson(jsonFile);
+			initialized = await this.initJson(jsonFile);
 		}
 
 		// Fallback to in-memory
-		entries ??= await this.initMemory();
+		if (!initialized) {
+			await this.initMemory();
+		}
 
-		// Track all entries
-		this.track(...entries);
-
-		// Delete oldest entries
+		// Delete oldest entries without loading the full history into memory
 		await this.deleteOldest();
+	}
 
-		return entries;
+	public async loadPage(offset: number, limit: number): Promise<ClipboardEntry[]> {
+		if (!this._database) return [];
+
+		const page = await this._database.entriesPage(offset, limit);
+		this.track(...page);
+		return page;
+	}
+
+	public async countEntries(): Promise<number> {
+		return (await this._database?.countEntries()) ?? 0;
 	}
 
 	private getFile(): Gio.File {
@@ -110,7 +123,7 @@ export class ClipboardEntryTracker {
 		return location ? Gio.File.new_for_path(location) : getDefaultDatabaseFile(this.ext, DatabaseBackend.Default);
 	}
 
-	private async initSqlite(file: Gio.File | null, showError: boolean): Promise<ClipboardEntry[] | null> {
+	private async initSqlite(file: Gio.File | null, showError: boolean): Promise<boolean> {
 		try {
 			// Check if DEBUG_COPYOUS_GDA_VERSION is set
 			const environment = GLib.get_environ();
@@ -135,44 +148,44 @@ export class ClipboardEntryTracker {
 					[_('Disable Warning'), () => this.ext.settings.set_boolean('disable-gda-warning', true)],
 				);
 			}
-			return null;
+			return false;
 		}
 
 		try {
 			this.ext.logger.log(`Using ${file === null ? 'in-memory ' : ''}Gda ${gda.__version__} database`);
 			this._database = new GdaDatabase(this.ext, gda, file);
 			await this._database.init();
-			return await this._database.entries();
+			return true;
 		} catch (e) {
 			this.ext.logger.error('Failed to load Gda');
 			this.ext.notificationManager?.warning(_('Failed to load Gda'), _('Clipboard history will be disabled'));
 
-			return null;
+			return false;
 		}
 	}
 
-	private async initJson(file: Gio.File | null): Promise<ClipboardEntry[] | null> {
+	private async initJson(file: Gio.File | null): Promise<boolean> {
 		if (file === null) return await this.initMemory();
 
 		try {
 			this.ext.logger.log('Using JSON database');
 			this._database = new JsonDatabase(this.ext, file);
 			await this._database.init();
-			return await this._database.entries();
+			return true;
 		} catch (e) {
 			this.ext.logger.error('Failed to initialize JSON database', e);
 			this.ext.notificationManager?.warning(_('Failed to load JSON'), _('Clipboard history will be disabled'));
 
-			return null;
+			return false;
 		}
 	}
 
-	private async initMemory(): Promise<ClipboardEntry[]> {
+	private async initMemory(): Promise<boolean> {
 		this.ext.logger.log('Using in-memory database');
 
 		this._database = new MemoryDatabase();
 		await this._database.init();
-		return [];
+		return true;
 	}
 
 	public async clear(history: ClipboardHistory | null = null) {
@@ -208,6 +221,15 @@ export class ClipboardEntryTracker {
 				trackedEntry.datetime = GLib.DateTime.new_now_utc();
 				return null;
 			}
+
+			// Entry exists in the database but is not tracked yet
+			const entry = await this._database?.getEntryById(id);
+			if (entry) {
+				entry.datetime = GLib.DateTime.new_now_utc();
+				await this._database?.updateProperty(entry, 'datetime');
+				this.track(entry);
+				return entry;
+			}
 		}
 
 		const entry = await this._database?.insert(type, content, metadata);
@@ -222,19 +244,11 @@ export class ClipboardEntryTracker {
 		return entry;
 	}
 
-	public checkOldest(): boolean {
+	public async checkOldest(): Promise<boolean> {
 		const M = this.ext.settings.get_int('history-time');
 		if (M === 0) return false;
 
-		const now = GLib.DateTime.new_now_utc();
-		const olderThan = now.add_minutes(-M)!;
-
-		for (const entry of this._entries.values()) {
-			if (entry.pinned || entry.tag) continue;
-			if (entry.datetime.compare(olderThan) < 0) return true;
-		}
-
-		return false;
+		return (await this._database?.hasUnprotectedEntriesOlderThan(M)) ?? false;
 	}
 
 	public async deleteOldest() {
@@ -246,6 +260,8 @@ export class ClipboardEntryTracker {
 
 	private track(...entries: ClipboardEntry[]) {
 		for (const entry of entries) {
+			if (this._entries.has(entry.id)) continue;
+
 			entry.connect('notify::content', async () => {
 				const id = await this._database?.updateProperty(entry, 'content');
 				// If entry conflicts with another entry, delete it

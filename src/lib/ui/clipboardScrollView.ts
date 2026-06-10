@@ -1,4 +1,5 @@
 import Clutter from 'gi://Clutter';
+import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 
@@ -18,11 +19,18 @@ import { SearchQuery } from './searchEntry.js';
 			Clutter.Orientation.HORIZONTAL,
 		),
 	},
+	Signals: {
+		'load-more': {},
+	},
 })
 export class ClipboardScrollView extends St.ScrollView {
 	private _orientation: Clutter.Orientation = Clutter.Orientation.HORIZONTAL;
 	private _itemWidth: number = 0;
 	private _itemHeight: number = 0;
+	private _loadMoreTimeoutId: number = -1;
+	private _loadAllRemaining: (() => Promise<void>) | null = null;
+	private _hadjustmentSignalId: number = 0;
+	private _vadjustmentSignalId: number = 0;
 
 	private readonly _scrollContainer: ClipboardScrollContainer;
 
@@ -48,6 +56,7 @@ export class ClipboardScrollView extends St.ScrollView {
 
 		this.connect('notify::width', this.scrollbarWorkaround.bind(this));
 		this._scrollContainer.connect('notify::width', this.scrollbarWorkaround.bind(this));
+		this.updateAdjustmentConnections();
 
 		// Connect properties
 		this.ext.settings.connectObject(
@@ -76,6 +85,28 @@ export class ClipboardScrollView extends St.ScrollView {
 		this._orientation = value;
 		this.notify('orientation');
 		this.updateScrollbar();
+		this.updateAdjustmentConnections();
+	}
+
+	private updateAdjustmentConnections() {
+		if (this._hadjustmentSignalId > 0) {
+			this.hadjustment.disconnect(this._hadjustmentSignalId);
+			this._hadjustmentSignalId = 0;
+		}
+		if (this._vadjustmentSignalId > 0) {
+			this.vadjustment.disconnect(this._vadjustmentSignalId);
+			this._vadjustmentSignalId = 0;
+		}
+
+		if (this._orientation === Clutter.Orientation.HORIZONTAL) {
+			this._hadjustmentSignalId = this.hadjustment.connect('notify::value', this.checkLoadMore.bind(this));
+		} else {
+			this._vadjustmentSignalId = this.vadjustment.connect('notify::value', this.checkLoadMore.bind(this));
+		}
+	}
+
+	public setLoadAllRemainingHandler(handler: (() => Promise<void>) | null): void {
+		this._loadAllRemaining = handler;
 	}
 
 	public addItem(item: ClipboardItem) {
@@ -100,6 +131,28 @@ export class ClipboardScrollView extends St.ScrollView {
 
 	public activateFirst() {
 		this._scrollContainer.activateFirst();
+	}
+
+	private getActiveAdjustment(): St.Adjustment {
+		return this._orientation === Clutter.Orientation.HORIZONTAL ? this.hadjustment : this.vadjustment;
+	}
+
+	private checkLoadMore(): void {
+		if (this._loadMoreTimeoutId >= 0) return;
+
+		this._loadMoreTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
+			this._loadMoreTimeoutId = -1;
+
+			const adjustment = this.getActiveAdjustment();
+			if (adjustment.upper <= adjustment.page_size) return GLib.SOURCE_REMOVE;
+
+			const threshold = adjustment.upper * 0.8;
+			if (adjustment.value + adjustment.page_size >= threshold) {
+				this.emit('load-more');
+			}
+
+			return GLib.SOURCE_REMOVE;
+		});
 	}
 
 	private updateSize() {
@@ -148,10 +201,17 @@ export class ClipboardScrollView extends St.ScrollView {
 
 		// End
 		if (key === Clutter.KEY_End) {
-			const child = get_last_visible_child(this._scrollContainer);
-			if (child) {
-				this._scrollContainer.focusChild(child);
-			}
+			void (async () => {
+				try {
+					await this._loadAllRemaining?.();
+					const child = get_last_visible_child(this._scrollContainer);
+					if (child) {
+						this._scrollContainer.focusChild(child);
+					}
+				} catch (error) {
+					this.ext.logger.error(error);
+				}
+			})();
 			return Clutter.EVENT_STOP;
 		}
 
@@ -209,10 +269,26 @@ export class ClipboardScrollView extends St.ScrollView {
 			adjustment.value = value;
 		}
 
+		this.checkLoadMore();
+
 		return Clutter.EVENT_STOP;
 	}
 
 	override destroy() {
+		if (this._loadMoreTimeoutId >= 0) {
+			GLib.source_remove(this._loadMoreTimeoutId);
+			this._loadMoreTimeoutId = -1;
+		}
+
+		if (this._hadjustmentSignalId > 0) {
+			this.hadjustment.disconnect(this._hadjustmentSignalId);
+			this._hadjustmentSignalId = 0;
+		}
+		if (this._vadjustmentSignalId > 0) {
+			this.vadjustment.disconnect(this._vadjustmentSignalId);
+			this._vadjustmentSignalId = 0;
+		}
+
 		this.ext.settings.disconnectObject(this);
 
 		super.destroy();

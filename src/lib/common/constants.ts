@@ -6,6 +6,10 @@ import type { Extension } from 'resource:///org/gnome/shell/extensions/extension
 
 import { DatabaseBackend } from './settings.js';
 
+/** Number of clipboard items loaded per UI page. */
+// TODO: could make this configurable in the future
+export const CLIPBOARD_PAGE_SIZE = 25;
+
 export const ItemType = {
 	Text: 'Text',
 	Code: 'Code',

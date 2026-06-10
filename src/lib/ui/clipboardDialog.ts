@@ -20,6 +20,7 @@ import { Icon, loadIcon } from '../common/icons.js';
 import { OpenClipboardDialogBehavior } from '../common/settings.js';
 import { ClipboardEntry } from '../database/database.js';
 import { VERSION } from '../misc/compatibility.js';
+import { ClipboardListLoader } from './clipboardListLoader.js';
 import { ClipboardScrollView } from './clipboardScrollView.js';
 import { ClipboardItemMenu } from './components/clipboardItemMenu.js';
 import { ConfirmClearHistoryDialog } from './indicator.js';
@@ -273,6 +274,7 @@ export class ClipboardDialog extends St.Widget {
 	private readonly _scrollView: ClipboardScrollView;
 	private readonly _footer: ClipboardDialogFooter;
 	private readonly _clipboardItemMenu: ClipboardItemMenu;
+	private readonly _loader: ClipboardListLoader;
 
 	constructor(private ext: CopyousExtension) {
 		super({
@@ -312,7 +314,25 @@ export class ClipboardDialog extends St.Widget {
 
 		this._header.connect('open-settings', this.openSettings.bind(this));
 		this._header.connect('clear-history', this.confirmClearHistory.bind(this));
-		this._header.searchEntry.connect('search', (_, query: SearchQuery) => this._scrollView.search(query));
+
+		// Scrollbox
+		this._scrollView = new ClipboardScrollView(ext);
+		this._dialog.add_child(this._scrollView);
+
+		this._loader = new ClipboardListLoader(
+			ext,
+			(entry) => this.addEntryInternal(entry),
+			() => this._scrollView.clearItems(),
+		);
+
+		this._scrollView.connect('load-more', () => {
+			if (this._loader.shouldLoadMore()) {
+				this._loader.loadNextPage().catch((error) => this.ext.logger.error(error));
+			}
+		});
+		this._scrollView.setLoadAllRemainingHandler(() => this._loader.loadAllRemaining());
+
+		this._header.searchEntry.connect('search', (_, query: SearchQuery) => this._loader.search(query));
 		this._header.searchEntry.connect('activate', () => this._scrollView.activateFirst());
 
 		this._header.connect('notify::header-visible', () => {
@@ -322,10 +342,6 @@ export class ClipboardDialog extends St.Widget {
 				this._dialog.remove_style_class_name('show-header');
 			}
 		});
-
-		// Scrollbox
-		this._scrollView = new ClipboardScrollView(ext);
-		this._dialog.add_child(this._scrollView);
 
 		this._widthConstraint = new Clutter.BindConstraint({
 			coordinate: Clutter.BindCoordinate.WIDTH,
@@ -472,6 +488,9 @@ export class ClipboardDialog extends St.Widget {
 		this.opened = true;
 		global.compositor.disable_unredirect();
 
+		this._loader.resetList();
+		this._loader.loadInitialPage().catch((error) => this.ext.logger.error(error));
+
 		this._dialog.ease({
 			opacity: 255,
 			translationX: 0,
@@ -530,12 +549,18 @@ export class ClipboardDialog extends St.Widget {
 				this._grab = null;
 				this._closing = false;
 				this.hide();
+				this._loader.resetList();
 				global.compositor.enable_unredirect();
 			},
 		});
 	}
 
 	public addEntry(entry: ClipboardEntry): void {
+		if (!this._loader.trackEntry(entry)) return;
+		this.addEntryInternal(entry);
+	}
+
+	private addEntryInternal(entry: ClipboardEntry): void {
 		let item;
 		try {
 			item = (() => {
@@ -637,8 +662,19 @@ export class ClipboardDialog extends St.Widget {
 		}
 	}
 
+	public resetList() {
+		this._loader.resetList();
+	}
+
+	public reloadList() {
+		this._loader.resetList();
+		if (this.opened) {
+			this._loader.loadInitialPage().catch((error) => this.ext.logger.error(error));
+		}
+	}
+
 	public clearEntries() {
-		this._scrollView.clearItems();
+		this.resetList();
 	}
 
 	private openSettings() {

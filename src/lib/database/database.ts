@@ -132,6 +132,26 @@ export interface Database {
 	entries(): Promise<ClipboardEntry[]>;
 
 	/**
+	 * Gets a page of entries ordered by datetime descending.
+	 */
+	entriesPage(offset: number, limit: number): Promise<ClipboardEntry[]>;
+
+	/**
+	 * Gets the total number of entries in the database.
+	 */
+	countEntries(): Promise<number>;
+
+	/**
+	 * Gets an entry by its id.
+	 */
+	getEntryById(id: number): Promise<ClipboardEntry | null>;
+
+	/**
+	 * Returns true if any unpinned, untagged entry is older than the given number of minutes.
+	 */
+	hasUnprotectedEntriesOlderThan(olderThanMinutes: number): Promise<boolean>;
+
+	/**
 	 * Select a conflicting entry by its type and content.
 	 * @param entry The entry to search its conflict for.
 	 * @returns The id of the conflicting entry or null if no conflict was found.

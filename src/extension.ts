@@ -40,9 +40,10 @@ export default class CopyousExtension extends Extension {
 
 	public shortcutsManager: ShortcutManager | undefined;
 
-	private entryTracker: ClipboardEntryTracker | undefined;
+	public entryTracker: ClipboardEntryTracker | undefined;
 	private historyTimeoutId: number = -1;
 	private updateHistory: boolean = false;
+	private historyMaintenanceInProgress: boolean = false;
 
 	public clipboardManager: ClipboardManager | undefined;
 
@@ -80,7 +81,7 @@ export default class CopyousExtension extends Extension {
 				this.indicator?.showEntry(entry);
 			},
 			'clear-history',
-			(_: unknown, history: ClipboardHistory) => this.entryTracker?.clear(history),
+			(_: unknown, history: ClipboardHistory) => this.clearHistory(history),
 			this,
 		);
 
@@ -89,7 +90,7 @@ export default class CopyousExtension extends Extension {
 			'open-dialog',
 			() => this.clipboardDialog?.open(),
 			'clear-history',
-			(_: unknown, history: ClipboardHistory) => this.entryTracker?.clear(history),
+			(_: unknown, history: ClipboardHistory) => this.clearHistory(history),
 			this,
 		);
 
@@ -103,7 +104,7 @@ export default class CopyousExtension extends Extension {
 			'hide',
 			() => this.clipboardDialog?.close(),
 			'clear-history',
-			(_: unknown, history: ClipboardHistory | -1) => this.entryTracker?.clear(history === -1 ? null : history),
+			(_: unknown, history: ClipboardHistory | -1) => this.clearHistory(history === -1 ? null : history),
 			this,
 		);
 
@@ -145,7 +146,9 @@ export default class CopyousExtension extends Extension {
 		this.clipboardManager.connectObject(
 			'clipboard',
 			(_: unknown, entry: ClipboardEntry) => {
-				this.clipboardDialog?.addEntry(entry);
+				if (this.clipboardDialog?.opened) {
+					this.clipboardDialog?.addEntry(entry);
+				}
 				this.indicator?.showEntry(entry);
 				this.indicator?.animate();
 				this.notificationManager?.notification(entry);
@@ -259,14 +262,16 @@ export default class CopyousExtension extends Extension {
 		this.hljsCallbacks.push(fn);
 	}
 
+	private clearHistory(history: ClipboardHistory | null) {
+		this.entryTracker?.clear(history).catch(this.logger.error.bind(this.logger));
+		this.clipboardDialog?.reloadList();
+	}
+
 	private async initEntryTracker() {
 		if (!this.entryTracker || !this.entryTracker.shouldInit) return;
 
-		this.clipboardDialog?.clearEntries();
-		const entries = await this.entryTracker.init();
-		for (const entry of entries) {
-			this.clipboardDialog?.addEntry(entry);
-		}
+		await this.entryTracker.init();
+		this.clipboardDialog?.reloadList();
 	}
 
 	private async initHistoryTimeout() {
@@ -281,9 +286,21 @@ export default class CopyousExtension extends Extension {
 			this.updateHistory = this.clipboardDialog?.opened ?? false;
 			if (this.updateHistory) return GLib.SOURCE_CONTINUE;
 
-			if (this.entryTracker?.checkOldest()) {
-				this.entryTracker?.deleteOldest().catch(this.logger.error.bind(this.logger));
-			}
+			if (this.historyMaintenanceInProgress) return GLib.SOURCE_CONTINUE;
+
+			this.historyMaintenanceInProgress = true;
+			this.entryTracker
+				?.checkOldest()
+				.then((oldest) => {
+					if (oldest) {
+						return this.entryTracker?.deleteOldest();
+					}
+					return null;
+				})
+				.catch(this.logger.error.bind(this.logger))
+				.finally(() => {
+					this.historyMaintenanceInProgress = false;
+				});
 
 			return GLib.SOURCE_CONTINUE;
 		});
