@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:27+0000\n"
+"POT-Creation-Date: 2026-10-12 23:52+0000\n"
 "PO-Revision-Date: 2026-03-18 07:29+0300\n"
 "Last-Translator: Muha Aliss <muhaaliss@pm.me>\n"
 "Language-Team: Turkish\n"
@@ -126,8 +126,8 @@ msgstr "Renk Kopyalandı"
 #: src/lib/preferences/general/feedbackSettings.ts:259
 #: src/lib/preferences/general/feedbackSettings.ts:308
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:39
-#: src/lib/ui/components/editDialog.ts:217
-#: src/lib/ui/components/editDialog.ts:244
+#: src/lib/ui/components/editDialog.ts:220
+#: src/lib/ui/components/editDialog.ts:247
 msgid "None"
 msgstr "Hiçbiri"
 
@@ -217,7 +217,7 @@ msgstr "Hangi türlere izin verileceğini seç"
 #: src/lib/preferences/dependencies/dependencies.ts:224
 #: src/lib/preferences/general/appExclusionSettings.ts:171
 #: src/lib/preferences/shortcuts/shortcutRow.ts:131
-#: src/lib/ui/components/editDialog.ts:306 src/lib/ui/indicator.ts:47
+#: src/lib/ui/components/editDialog.ts:309 src/lib/ui/indicator.ts:47
 msgid "Cancel"
 msgstr "İptal"
 
@@ -347,7 +347,7 @@ msgid "Edit Action"
 msgstr "Eylemi Düzenle"
 
 #: src/lib/preferences/actions/actionDialog.ts:662
-#: src/lib/ui/components/editDialog.ts:313
+#: src/lib/ui/components/editDialog.ts:316
 msgid "Save"
 msgstr "Kaydet"
 
@@ -698,62 +698,62 @@ msgstr "Unicode'u Göster"
 msgid "Show the Unicode of the character"
 msgstr "Karakterin Unicode'unu göster"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:16
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:17
 msgid "Code Item"
 msgstr "Kod Öğesi"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:17
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:18
 msgid "Configure code clipboard items"
 msgstr "Kod pano öğelerini yapılandır"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:21
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:22
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:179
 msgid "Syntax Highlighting"
 msgstr "Sözdizimi Vurgulama"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:22
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:23
 msgid "Enable or disable syntax highlighting in the code item"
 msgstr "Kod öğesinde sözdizimi vurgulamayı etkinleştir veya devre dışı bırak"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:27
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:28
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:185
 msgid "Show Line Numbers"
 msgstr "Satır Numaralarını Göster"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:28
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:29
 msgid "Show line numbers in the code item"
 msgstr "Kod öğesinde satır numaralarını göster"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:33
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:34
 msgid "Show Code Info"
 msgstr "Kod Bilgisini Göster"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:34
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:35
 msgid "Show extra information in the code item"
 msgstr "Kod öğesinde ekstra bilgi göster"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:39
-#: src/lib/preferences/customization/items/textItemCustomization.ts:27
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:40
+#: src/lib/preferences/customization/items/textItemCustomization.ts:28
 msgid "Text Count Mode"
 msgstr "Metin Sayma Modu"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:40
-#: src/lib/preferences/customization/items/textItemCustomization.ts:28
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
+#: src/lib/preferences/customization/items/textItemCustomization.ts:29
 msgid "Show the number of characters, words or lines"
 msgstr "Karakter, kelime veya satır sayısını göster"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
-#: src/lib/preferences/customization/items/textItemCustomization.ts:29
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:42
+#: src/lib/preferences/customization/items/textItemCustomization.ts:30
 msgid "Characters"
 msgstr "Karakterler"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
-#: src/lib/preferences/customization/items/textItemCustomization.ts:29
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:42
+#: src/lib/preferences/customization/items/textItemCustomization.ts:30
 msgid "Lines"
 msgstr "Satırlar"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
-#: src/lib/preferences/customization/items/textItemCustomization.ts:29
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:42
+#: src/lib/preferences/customization/items/textItemCustomization.ts:30
 msgid "Words"
 msgstr "Kelimeler"
 
@@ -891,7 +891,7 @@ msgid "File Preview and File Info"
 msgstr "Dosya Önizlemesi ve Dosya Bilgisi"
 
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:172
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:26
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:27
 msgid "Background Size"
 msgstr "Arka Plan Boyutu"
 
@@ -900,13 +900,13 @@ msgid "Background size of the image preview"
 msgstr "Resim önizlemesinin arka plan boyutu"
 
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:174
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:28
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:29
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:85
 msgid "Contain"
 msgstr "İçer"
 
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:174
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:28
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:29
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:85
 msgid "Cover"
 msgstr "Kapak"
@@ -924,23 +924,23 @@ msgstr "Metin önizlemesinde satır numaralarını göster"
 msgid "Configure file exclusions for file previews"
 msgstr "Dosya önizlemeleri için dosya hariç tutmalarını yapılandır"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:15
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:16
 msgid "Image Item"
 msgstr "Resim Öğesi"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:16
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:17
 msgid "Configure image clipboard items"
 msgstr "Resim pano öğelerini yapılandır"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:20
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:21
 msgid "Show Image Info"
 msgstr "Resim Bilgisini Göster"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:21
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:22
 msgid "Show extra information in the image item"
 msgstr "Resim öğesinde ekstra bilgi göster"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:27
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:28
 msgid "Background size of the image"
 msgstr "Resmin arka plan boyutu"
 
@@ -1008,19 +1008,19 @@ msgstr "Bağlantı önizlemesinin yönelimi"
 msgid "Configure link exclusions for link previews"
 msgstr "Bağlantı önizlemeleri için bağlantı hariç tutmalarını yapılandır"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:16
+#: src/lib/preferences/customization/items/textItemCustomization.ts:17
 msgid "Text Item"
 msgstr "Metin Öğesi"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:17
+#: src/lib/preferences/customization/items/textItemCustomization.ts:18
 msgid "Configure text clipboard items"
 msgstr "Metin pano öğelerini yapılandır"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:21
+#: src/lib/preferences/customization/items/textItemCustomization.ts:22
 msgid "Show Text Info"
 msgstr "Metin Bilgisini Göster"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:22
+#: src/lib/preferences/customization/items/textItemCustomization.ts:23
 msgid "Show extra information in the text item"
 msgstr "Metin öğesinde ekstra bilgi göster"
 
@@ -1228,7 +1228,7 @@ msgid "Error Uninstalling %s"
 msgstr "%s Kaldırılırken Hata Oluştu"
 
 #: src/lib/preferences/dependencies/dependenciesSettings.ts:288
-#: src/lib/preferences/dependencies/dependenciesSettings.ts:382
+#: src/lib/preferences/dependencies/dependenciesSettings.ts:385
 msgid "Manage Highlight.js"
 msgstr "Highlight.js'yi Yönet"
 
@@ -1237,15 +1237,15 @@ msgid "Languages"
 msgstr "Diller"
 
 #: src/lib/preferences/dependencies/dependenciesSettings.ts:321
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:49
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:51
 msgid "Search"
 msgstr "Ara"
 
-#: src/lib/preferences/dependencies/dependenciesSettings.ts:375
+#: src/lib/preferences/dependencies/dependenciesSettings.ts:378
 msgid "Dependencies"
 msgstr "Bağımlılıklar"
 
-#: src/lib/preferences/dependencies/dependenciesSettings.ts:383
+#: src/lib/preferences/dependencies/dependenciesSettings.ts:386
 msgid "Manage the Highlight.js installation"
 msgstr "Highlight.js kurulumunu yönet"
 
@@ -1488,7 +1488,7 @@ msgstr ""
 "pano geçmişine ne yapılacağını seç"
 
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:130 src/lib/ui/clipboardDialog.ts:235
+#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:236
 #: src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "Temizle"
@@ -1536,6 +1536,26 @@ msgstr "Yapılandırma"
 #: src/lib/preferences/general/locationsGroup.ts:39
 msgid "Cache"
 msgstr "Önbellek"
+
+#: src/lib/preferences/general/versionSettings.ts:15
+msgid "Unknown"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:18
+msgid "Version"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:22
+msgid "Installed build"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:31
+msgid "Copy version"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:37
+msgid "Copied to clipboard"
+msgstr ""
 
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:20
 msgid "Open Clipboard Dialog"
@@ -1643,57 +1663,57 @@ msgstr "Açılır Menü"
 msgid "Select Item Type"
 msgstr "Öğe Türünü Seç"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:33
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:35
 msgid "Scroll"
 msgstr "Kaydır"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:51
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:53
 msgid "Toggle Pinned Search"
 msgstr "İğnelenmiş Aramayı Aç/Kapat"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:52
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:55
 msgid "Clear Item Tag/Type"
 msgstr "Öğe Etiketini/Türünü Temizle"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:53
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:56
 msgid "Activate First Item"
 msgstr "İlk Öğeyi Etkinleştir"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:62
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:69
 msgid "Next Item Type"
 msgstr "Sonraki Öğe Türü"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:63
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:70
 msgid "Previous Item Type"
 msgstr "Önceki Öğe Türü"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:64
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:71
 msgid "Next Item Tag"
 msgstr "Sonraki Öğe Etiketi"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:65
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:72
 msgid "Previous Item Tag"
 msgstr "Önceki Öğe Etiketi"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:66
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:73
 msgid "Select Item Tag"
 msgstr "Öğe Etiketini Seç"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:76
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:83
 msgid "Swap Scroll Shortcut"
 msgstr "Kaydırma Kısayolunu Değiştir"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:77
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:84
 msgid "Swaps scroll shortcuts of cycling item types and item tags"
 msgstr ""
 "Öğe türleri ve öğe etiketleri arasında gezinmek için kaydırma kısayollarını "
 "değiştirir"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:81
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:88
 msgid "Cycle Item Type"
 msgstr "Öğe Türü Döngüsü"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:83
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:90
 msgid "Cycle Item Tag"
 msgstr "Öğe Etiketi Döngüsü"
 
@@ -1709,51 +1729,51 @@ msgstr "Kısayolu Devre Dışı Bırak"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: src/lib/ui/components/contentInfo.ts:35
+#: src/lib/ui/components/contentInfo.ts:32
 #, javascript-format
 msgid "%dh"
 msgstr "%d sa"
 
-#: src/lib/ui/components/contentInfo.ts:36
+#: src/lib/ui/components/contentInfo.ts:33
 #, javascript-format
 msgid "%dm"
 msgstr "%d dk"
 
-#: src/lib/ui/components/contentInfo.ts:37
+#: src/lib/ui/components/contentInfo.ts:34
 #, javascript-format
 msgid "%ds"
 msgstr "%d sn"
 
-#: src/lib/ui/components/contentInfo.ts:116
+#: src/lib/ui/components/contentInfo.ts:114
 #, javascript-format
 msgid "%d char"
 msgid_plural "%d chars"
 msgstr[0] "%d karakter"
 msgstr[1] "%d karakter"
 
-#: src/lib/ui/components/contentInfo.ts:123
+#: src/lib/ui/components/contentInfo.ts:122
 #, javascript-format
 msgid "%d word"
 msgid_plural "%d words"
 msgstr[0] "%d kelime"
 msgstr[1] "%d kelime"
 
-#: src/lib/ui/components/contentInfo.ts:126
+#: src/lib/ui/components/contentInfo.ts:125
 #, javascript-format
 msgid "%d line"
 msgid_plural "%d lines"
 msgstr[0] "%d satır"
 msgstr[1] "%d satır"
 
-#: src/lib/ui/components/contentInfo.ts:186
+#: src/lib/ui/components/contentInfo.ts:185
 msgid "Missing File"
 msgstr "Eksik Dosya"
 
-#: src/lib/ui/components/contentInfo.ts:198
+#: src/lib/ui/components/contentInfo.ts:197
 msgid "Error"
 msgstr "Hata"
 
-#: src/lib/ui/components/editDialog.ts:269
+#: src/lib/ui/components/editDialog.ts:272
 msgid "Edit Clipboard Item"
 msgstr "Pano Öğesini Düzenle"
 
@@ -1826,55 +1846,55 @@ msgstr "Pano Boş"
 msgid "No Items Found"
 msgstr "Öğe Bulunamadı"
 
-#: src/lib/ui/searchEntry.ts:151
+#: src/lib/ui/searchEntry.ts:153
 msgid "__All"
 msgstr "__Hepsi"
 
-#: src/lib/ui/searchEntry.ts:155
+#: src/lib/ui/searchEntry.ts:157
 msgid "__Text"
 msgstr "__Metin"
 
-#: src/lib/ui/searchEntry.ts:156
+#: src/lib/ui/searchEntry.ts:158
 msgid "__Code"
 msgstr "__Kod"
 
-#: src/lib/ui/searchEntry.ts:157
+#: src/lib/ui/searchEntry.ts:159
 msgid "__Image"
 msgstr "__Resim"
 
-#: src/lib/ui/searchEntry.ts:158
+#: src/lib/ui/searchEntry.ts:160
 msgid "__File"
 msgstr "__Dosya"
 
-#: src/lib/ui/searchEntry.ts:159
+#: src/lib/ui/searchEntry.ts:161
 msgid "File__s"
 msgstr "Dosy__alar"
 
-#: src/lib/ui/searchEntry.ts:160
+#: src/lib/ui/searchEntry.ts:162
 msgid "__Link"
 msgstr "__Bağlantı"
 
-#: src/lib/ui/searchEntry.ts:161
+#: src/lib/ui/searchEntry.ts:163
 msgid "C__haracter"
 msgstr "K__arakter"
 
-#: src/lib/ui/searchEntry.ts:162
+#: src/lib/ui/searchEntry.ts:164
 msgid "Colo__r"
 msgstr "Re__nk"
 
-#: src/lib/ui/searchEntry.ts:274
+#: src/lib/ui/searchEntry.ts:278
 msgid "Type to search"
 msgstr "Aramak için yaz"
 
-#: src/prefs.ts:75
+#: src/prefs.ts:76
 msgid "General"
 msgstr "Genel"
 
-#: src/prefs.ts:95
+#: src/prefs.ts:97
 msgid "Customization"
 msgstr "Özelleştirme"
 
-#: src/prefs.ts:112
+#: src/prefs.ts:114
 msgid "Shortcuts"
 msgstr "Kısayollar"
 

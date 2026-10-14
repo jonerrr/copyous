@@ -13,13 +13,13 @@ import { ItemType, ItemTypes, Tag, Tags } from '../common/constants.js';
 import { enumParamSpec, registerClass } from '../common/gjs.js';
 import { Icon, loadIcon } from '../common/icons.js';
 import { ClipboardEntry } from '../database/database.js';
+import { ButtonMask } from '../misc/compatibility.js';
+import { Shortcut } from '../misc/shortcuts.js';
 import { TagsItem } from './components/tagsItem.js';
 
-const SearchCollator = new Intl.Collator(undefined, { sensitivity: 'base' });
-
-function localeContains(text: string, query: string): boolean {
+function localeContains(collator: Intl.Collator, text: string, query: string): boolean {
 	for (let offset = 0; offset <= text.length - query.length; offset++) {
-		const comparison = SearchCollator.compare(text.substring(offset, offset + query.length), query);
+		const comparison = collator.compare(text.substring(offset, offset + query.length), query);
 		if (comparison === 0) return true;
 	}
 	return false;
@@ -54,6 +54,7 @@ export class SearchQuery extends GObject.Object {
 		readonly tag: Tag | null,
 		readonly excludeTagged: boolean,
 		readonly type: ItemType | null,
+		private readonly collator: Intl.Collator,
 	) {
 		super();
 	}
@@ -78,7 +79,7 @@ export class SearchQuery extends GObject.Object {
 		if (this.query.length === 0) return true;
 		if (text.length === 0) return false;
 
-		return text.some((s) => localeContains(s, this.query));
+		return text.some((s) => localeContains(this.collator, s, this.query));
 	}
 
 	public matchesEntry(state: boolean, entry: ClipboardEntry, ...text: string[]): boolean {
@@ -100,6 +101,7 @@ export class SearchQuery extends GObject.Object {
 			this.tag,
 			this.excludeTagged,
 			this.type,
+			this.collator,
 		);
 	}
 }
@@ -259,6 +261,8 @@ class ItemPopupMenu extends PopupMenu.PopupMenu<ItemPopupMenuSignals> {
 	},
 })
 export class SearchEntry extends St.Entry {
+	private _collator: Intl.Collator | undefined = new Intl.Collator(undefined, { sensitivity: 'base' });
+
 	private _prevSearch: SearchQuery | null = null;
 	private _pinned: boolean = false;
 	private _tag: Tag | null = null;
@@ -296,7 +300,7 @@ export class SearchEntry extends St.Entry {
 
 		this._itemButton = new St.Button({
 			style_class: 'search-entry-button item-button',
-			button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO,
+			button_mask: ButtonMask.PRIMARY | ButtonMask.MIDDLE,
 		});
 		left.add_child(this._itemButton);
 
@@ -477,7 +481,16 @@ export class SearchEntry extends St.Entry {
 				change = change === SearchChange.Same || change === typeChange ? typeChange : SearchChange.Different;
 		}
 
-		return new SearchQuery(change, query, this.pinned, excludePinned, this.tag, excludeTagged, this.type);
+		return new SearchQuery(
+			change,
+			query,
+			this.pinned,
+			excludePinned,
+			this.tag,
+			excludeTagged,
+			this.type,
+			this._collator!,
+		);
 	}
 
 	private search() {
@@ -515,19 +528,21 @@ export class SearchEntry extends St.Entry {
 		const cursor = this.clutter_text.get_cursor_position();
 		const start = cursor === 0 || (this.text.length === 0 && cursor === -1);
 		if ((key === Clutter.KEY_Left || key === Clutter.KEY_KP_Left) && start) {
-			this.primary_icon.first_child.grab_key_focus();
+			this.primary_icon!.first_child!.grab_key_focus();
 			return Clutter.EVENT_STOP;
 		}
 
 		// Navigate focus to pin button: right + right & cursor at end
 		const end = cursor === this.text.length || cursor === -1;
 		if ((key === Clutter.KEY_Right || key === Clutter.KEY_KP_Right) && end) {
-			this.secondary_icon.first_child.grab_key_focus();
+			this.secondary_icon!.first_child!.grab_key_focus();
 			return Clutter.EVENT_STOP;
 		}
 
-		// Toggle pin: alt
-		if (key === Clutter.KEY_Alt_L || key === Clutter.KEY_Alt_R || key === Clutter.KEY_ISO_Level3_Shift) {
+		// Toggle pinned search
+		if (
+			this.ext.shortcutsManager?.getShortcutForKeyBinding(key, event.get_state()) === Shortcut.TogglePinnedSearch
+		) {
 			this.pinned = !this.pinned;
 			return Clutter.EVENT_STOP;
 		}
@@ -609,6 +624,7 @@ export class SearchEntry extends St.Entry {
 	override destroy() {
 		this.ext.settings.disconnectObject(this);
 		this._menu.destroy();
+		this._collator = undefined;
 
 		super.destroy();
 	}

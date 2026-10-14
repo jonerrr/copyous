@@ -8,6 +8,7 @@ import St from 'gi://St';
 import type CopyousExtension from '../../extension.js';
 import { Color } from '../common/color.js';
 import { ItemType, getImagesPath } from '../common/constants.js';
+import type { SignalMethods } from '../common/gjs.js';
 import { registerClass } from '../common/gjs.js';
 import { ClipboardEntry, FileOperation, Metadata } from '../database/database.js';
 import { ClipboardEntryTracker } from '../database/entryTracker.js';
@@ -17,10 +18,6 @@ Gio._promisify(Gio.File.prototype, 'load_contents_async');
 Gio._promisify(Gio.File.prototype, 'replace_contents_async');
 Gio._promisify(Gio.MemoryOutputStream.prototype, 'splice_async');
 Gio._promisify(Meta.SelectionSource.prototype, 'read_async');
-
-const Utf8Decoder = new TextDecoder();
-const Utf8Encoder = new TextEncoder();
-const GraphemeSegmenter = new Intl.Segmenter();
 
 const MimeTypes = {
 	Text: ['text/plain;charset=utf-8', 'UTF8_STRING', 'text/plain', 'STRING'],
@@ -55,29 +52,35 @@ function contentChecksum(content: ClipboardContent): string | null {
 	}
 }
 
-function hasMoreGraphemes(text: string, max: number): boolean {
-	const iterator = GraphemeSegmenter.segment(text)[Symbol.iterator]();
-	for (let i = 0; i < max; i++) iterator.next();
-	return iterator.next().value !== undefined;
-}
+const ClipboardManagerSignals = {
+	clipboard: {
+		param_types: [ClipboardEntry.$gtype as GObject.GType<ClipboardEntry>],
+	},
+	text: {
+		param_types: [GObject.TYPE_STRING],
+	},
+	image: {
+		param_types: [
+			GObject.TYPE_JSOBJECT as unknown as GObject.GType<Uint8Array>,
+			GObject.TYPE_INT,
+			GObject.TYPE_INT,
+		],
+	},
+} as const;
 
 @registerClass({
-	Signals: {
-		clipboard: {
-			param_types: [ClipboardEntry.$gtype],
-		},
-		text: {
-			param_types: [GObject.TYPE_STRING],
-		},
-		image: {
-			param_types: [GObject.TYPE_JSOBJECT, GObject.TYPE_INT, GObject.TYPE_INT],
-		},
-	},
+	Signals: ClipboardManagerSignals,
 })
 export class ClipboardManager extends GObject.Object {
+	declare emit: SignalMethods<this, typeof ClipboardManagerSignals>['emit'];
+
+	private textDecoder: TextDecoder | undefined = new TextDecoder();
+	private textEncoder: TextEncoder | undefined = new TextEncoder();
+	private graphemeSegmenter: Intl.Segmenter | undefined = new Intl.Segmenter();
+
 	private selection: Meta.Selection;
 	private clipboard: St.Clipboard;
-	private keyboard: Keyboard;
+	private keyboard: Keyboard | undefined;
 	private signalId: number = -1;
 	private pasteSignalId: number = -1;
 
@@ -91,13 +94,17 @@ export class ClipboardManager extends GObject.Object {
 
 		this.selection = global.display.get_selection();
 		this.clipboard = St.Clipboard.get_default();
-		this.keyboard = new Keyboard();
 
 		this.signalId = this.selection.connect('owner-changed', this.ownerChanged.bind(this));
 	}
 
 	public destroy() {
-		this.keyboard.destroy();
+		this.textDecoder = undefined;
+		this.textEncoder = undefined;
+		this.graphemeSegmenter = undefined;
+
+		this.keyboard?.destroy();
+		this.keyboard = undefined;
 
 		if (this.signalId >= 0) this.selection.disconnect(this.signalId);
 		if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
@@ -128,7 +135,7 @@ export class ClipboardManager extends GObject.Object {
 		// File
 		if (content.type === ContentType.File) {
 			const s = `${FileOperation.Copy}\n${content.paths.join('\n')}`;
-			const bytes = Utf8Encoder.encode(s);
+			const bytes = this.textEncoder!.encode(s);
 			this.clipboard.set_content(St.ClipboardType.CLIPBOARD, MimeTypes.File[0], bytes);
 			return;
 		}
@@ -139,6 +146,8 @@ export class ClipboardManager extends GObject.Object {
 
 		if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
 		this.pasteSignalId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+			this.keyboard ??= new Keyboard();
+
 			// https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator/blob/89c57703641a9d5d15f899f6e780174641911d95/extension.js#L1094
 			if (this.keyboard.purpose === Clutter.InputContentPurpose.TERMINAL) {
 				this.keyboard.press(Clutter.KEY_Control_L);
@@ -230,7 +239,7 @@ export class ClipboardManager extends GObject.Object {
 		const window = global.display.focus_window;
 		if (window) {
 			const exclusions = this.ext.settings.get_strv('wmclass-exclusions');
-			if (exclusions.includes(window.wm_class)) return false;
+			if (window.wm_class && exclusions.includes(window.wm_class)) return false;
 		}
 
 		return !this.ext.settings.get_boolean('incognito');
@@ -319,7 +328,7 @@ export class ClipboardManager extends GObject.Object {
 		const fileMimeType = MimeTypes.File.find((value) => mimeTypes.includes(value));
 		if (fileMimeType) {
 			const bytes = await getBytes(fileMimeType);
-			const text = Utf8Decoder.decode(bytes).trim();
+			const text = this.textDecoder!.decode(bytes).trim();
 			if (text) {
 				const files = text
 					.split('\n')
@@ -340,7 +349,7 @@ export class ClipboardManager extends GObject.Object {
 		const textMimeType = MimeTypes.Text.find((value) => mimeTypes.includes(value));
 		if (textMimeType) {
 			const bytes = await getBytes(textMimeType);
-			const text = Utf8Decoder.decode(bytes);
+			const text = this.textDecoder!.decode(bytes);
 			if (text && text.trim()) {
 				return { type: ContentType.Text, text };
 			} else {
@@ -366,7 +375,7 @@ export class ClipboardManager extends GObject.Object {
 
 			// Character
 			const maxCharacters = this.ext.settings.get_child('character-item').get_int('max-characters');
-			if (!hasMoreGraphemes(trimmed, maxCharacters)) {
+			if (!this.hasMoreGraphemes(trimmed, maxCharacters)) {
 				return [ItemType.Character, content.text, null];
 			}
 
@@ -428,5 +437,11 @@ export class ClipboardManager extends GObject.Object {
 		}
 
 		return null;
+	}
+
+	private hasMoreGraphemes(text: string, max: number): boolean {
+		const iterator = this.graphemeSegmenter!.segment(text)[Symbol.iterator]();
+		for (let i = 0; i < max; i++) iterator.next();
+		return iterator.next().value !== undefined;
 	}
 }

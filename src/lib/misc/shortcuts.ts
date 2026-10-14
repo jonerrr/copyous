@@ -11,6 +11,7 @@ import type CopyousExtension from '../../extension.js';
 import { instanceofAction, instanceofActionSubmenu, loadConfig } from '../common/actions.js';
 import { getActionsConfigPath } from '../common/constants.js';
 import { registerClass } from '../common/gjs.js';
+import type { SignalMethods } from '../common/gjs.js';
 
 export const Shortcut = {
 	Open: 'open-clipboard-dialog-shortcut',
@@ -21,6 +22,7 @@ export const Shortcut = {
 	Edit: 'edit-item-shortcut',
 	EditTitle: 'edit-title-shortcut',
 	Menu: 'open-menu-shortcut',
+	TogglePinnedSearch: 'toggle-pinned-search-shortcut',
 } as const;
 
 export type Shortcut = (typeof Shortcut)[keyof typeof Shortcut];
@@ -49,16 +51,20 @@ class ShortcutBinding extends GObject.Object {
 	}
 }
 
+const ShortcutManagerSignals = {
+	'open-clipboard-dialog': {},
+	'toggle-incognito-mode': {},
+} as const;
+
 @registerClass({
 	Properties: {
 		shift: GObject.ParamSpec.boolean('shift', null, null, GObject.ParamFlags.READABLE, false),
 	},
-	Signals: {
-		'open-clipboard-dialog': {},
-		'toggle-incognito-mode': {},
-	},
+	Signals: ShortcutManagerSignals,
 })
 export class ShortcutManager extends GObject.Object {
+	declare emit: SignalMethods<this, typeof ShortcutManagerSignals>['emit'];
+
 	private _actor: Clutter.Actor | null;
 
 	private _shortcuts: { [shortcut in Shortcut]?: ShortcutBinding } = {};
@@ -82,6 +88,7 @@ export class ShortcutManager extends GObject.Object {
 		this.registerShortcut(Shortcut.Edit);
 		this.registerShortcut(Shortcut.EditTitle);
 		this.registerShortcut(Shortcut.Menu);
+		this.registerShortcut(Shortcut.TogglePinnedSearch);
 
 		this._actor = actor;
 		actor.connectObject(
@@ -109,7 +116,7 @@ export class ShortcutManager extends GObject.Object {
 		this.updateActions(true).catch(() => {});
 	}
 
-	private registerGlobalShortcut(key: Shortcut, signal: string) {
+	private registerGlobalShortcut(key: Shortcut, signal: keyof typeof ShortcutManagerSignals) {
 		Main.wm.addKeybinding(
 			key,
 			this.ext.settings as Gio.Settings,
@@ -179,7 +186,7 @@ export class ShortcutManager extends GObject.Object {
 	}
 
 	public getShortcutForKeyBinding(keyval: number, mask: Clutter.ModifierType): Shortcut | null {
-		const accelerator = Meta.accelerator_name(mask, keyval);
+		const accelerator = ShortcutManager.acceleratorName(mask, keyval);
 		for (const [key, binding] of Object.entries(this._shortcuts)) {
 			if (binding.shortcuts.includes(accelerator)) return key as Shortcut;
 		}
@@ -187,7 +194,7 @@ export class ShortcutManager extends GObject.Object {
 	}
 
 	public getActionForKeyBinding(keyval: number, mask: Clutter.ModifierType): string | null {
-		const accelerator = Meta.accelerator_name(mask, keyval);
+		const accelerator = ShortcutManager.acceleratorName(mask, keyval);
 		return this._actions[accelerator] ?? null;
 	}
 
@@ -199,5 +206,10 @@ export class ShortcutManager extends GObject.Object {
 		this._actor?.disconnectObject(this);
 		this._monitor?.disconnectObject(this);
 		this._monitor.cancel();
+	}
+
+	private static acceleratorName(mask: Clutter.ModifierType, keyval: number): string {
+		const accelerator = Meta.accelerator_name(mask, keyval);
+		return accelerator.replace(/Alt_[LR]|ISO_Level3_Shift$/g, 'Alt');
 	}
 }

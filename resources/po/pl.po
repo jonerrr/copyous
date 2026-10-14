@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:27+0000\n"
-"PO-Revision-Date: 2026-04-30 18:05+0200\n"
+"POT-Creation-Date: 2026-10-12 23:52+0000\n"
+"PO-Revision-Date: 2026-05-10 21:03+0200\n"
 "Last-Translator: Adam Lewicki <a.lewicki95@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -128,8 +128,8 @@ msgstr "Skopiowany kolor"
 #: src/lib/preferences/general/feedbackSettings.ts:259
 #: src/lib/preferences/general/feedbackSettings.ts:308
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:39
-#: src/lib/ui/components/editDialog.ts:217
-#: src/lib/ui/components/editDialog.ts:244
+#: src/lib/ui/components/editDialog.ts:220
+#: src/lib/ui/components/editDialog.ts:247
 msgid "None"
 msgstr "Brak"
 
@@ -219,7 +219,7 @@ msgstr "Wybierz dozwolone typy"
 #: src/lib/preferences/dependencies/dependencies.ts:224
 #: src/lib/preferences/general/appExclusionSettings.ts:171
 #: src/lib/preferences/shortcuts/shortcutRow.ts:131
-#: src/lib/ui/components/editDialog.ts:306 src/lib/ui/indicator.ts:47
+#: src/lib/ui/components/editDialog.ts:309 src/lib/ui/indicator.ts:47
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -350,7 +350,7 @@ msgid "Edit Action"
 msgstr "Edytuj akcję"
 
 #: src/lib/preferences/actions/actionDialog.ts:662
-#: src/lib/ui/components/editDialog.ts:313
+#: src/lib/ui/components/editDialog.ts:316
 msgid "Save"
 msgstr "Zapisz"
 
@@ -700,62 +700,62 @@ msgstr "Pokaż Unicode"
 msgid "Show the Unicode of the character"
 msgstr "Pokaż kod Unicode znaku"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:16
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:17
 msgid "Code Item"
 msgstr "Element kodu"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:17
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:18
 msgid "Configure code clipboard items"
 msgstr "Konfiguruj elementy kodu programu schowka"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:21
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:22
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:179
 msgid "Syntax Highlighting"
 msgstr "Podświetlanie składni"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:22
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:23
 msgid "Enable or disable syntax highlighting in the code item"
 msgstr "Włącz lub wyłącz podświetlanie składni w elemencie kodu"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:27
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:28
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:185
 msgid "Show Line Numbers"
 msgstr "Pokaż numery linii"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:28
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:29
 msgid "Show line numbers in the code item"
 msgstr "Pokaż numery linii w elemencie kodu"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:33
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:34
 msgid "Show Code Info"
 msgstr "Pokaż informacje o kodzie"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:34
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:35
 msgid "Show extra information in the code item"
 msgstr "Pokaż dodatkowe informacje w elemencie kodu"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:39
-#: src/lib/preferences/customization/items/textItemCustomization.ts:27
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:40
+#: src/lib/preferences/customization/items/textItemCustomization.ts:28
 msgid "Text Count Mode"
 msgstr "Tryb liczenia tekstu"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:40
-#: src/lib/preferences/customization/items/textItemCustomization.ts:28
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
+#: src/lib/preferences/customization/items/textItemCustomization.ts:29
 msgid "Show the number of characters, words or lines"
 msgstr "Pokaż liczbę znaków, słów lub linii"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
-#: src/lib/preferences/customization/items/textItemCustomization.ts:29
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:42
+#: src/lib/preferences/customization/items/textItemCustomization.ts:30
 msgid "Characters"
 msgstr "Znaki"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
-#: src/lib/preferences/customization/items/textItemCustomization.ts:29
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:42
+#: src/lib/preferences/customization/items/textItemCustomization.ts:30
 msgid "Lines"
 msgstr "Linie"
 
-#: src/lib/preferences/customization/items/codeItemCustomization.ts:41
-#: src/lib/preferences/customization/items/textItemCustomization.ts:29
+#: src/lib/preferences/customization/items/codeItemCustomization.ts:42
+#: src/lib/preferences/customization/items/textItemCustomization.ts:30
 msgid "Words"
 msgstr "Słowa"
 
@@ -893,7 +893,7 @@ msgid "File Preview and File Info"
 msgstr "Podgląd pliku i Informacje o pliku"
 
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:172
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:26
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:27
 msgid "Background Size"
 msgstr "Rozmiar tła"
 
@@ -902,13 +902,13 @@ msgid "Background size of the image preview"
 msgstr "Rozmiar tła podglądu obrazu"
 
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:174
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:28
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:29
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:85
 msgid "Contain"
 msgstr "Dopasuj"
 
 #: src/lib/preferences/customization/items/fileItemCustomization.ts:174
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:28
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:29
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:85
 msgid "Cover"
 msgstr "Pokryj"
@@ -925,23 +925,23 @@ msgstr "Pokaż numery wierszy w podglądzie tekstu"
 msgid "Configure file exclusions for file previews"
 msgstr "Konfiguruj wykluczenia plików dla podglądów plików"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:15
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:16
 msgid "Image Item"
 msgstr "Element graficzny"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:16
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:17
 msgid "Configure image clipboard items"
 msgstr "Konfiguruj elementy graficzne schowka"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:20
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:21
 msgid "Show Image Info"
 msgstr "Pokaż informacje o obrazie"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:21
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:22
 msgid "Show extra information in the image item"
 msgstr "Pokaż dodatkowe informacje w elemencie graficznym"
 
-#: src/lib/preferences/customization/items/imageItemCustomization.ts:27
+#: src/lib/preferences/customization/items/imageItemCustomization.ts:28
 msgid "Background size of the image"
 msgstr "Rozmiar tła obrazu"
 
@@ -1009,19 +1009,19 @@ msgstr "Orientacja podglądu odnośnika"
 msgid "Configure link exclusions for link previews"
 msgstr "Konfiguruj wykluczenia odnośników dla podglądów odnośników"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:16
+#: src/lib/preferences/customization/items/textItemCustomization.ts:17
 msgid "Text Item"
 msgstr "Element tekstowy"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:17
+#: src/lib/preferences/customization/items/textItemCustomization.ts:18
 msgid "Configure text clipboard items"
 msgstr "Konfiguruj elementy tekstowe schowka"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:21
+#: src/lib/preferences/customization/items/textItemCustomization.ts:22
 msgid "Show Text Info"
 msgstr "Pokaż informacje tekstowe"
 
-#: src/lib/preferences/customization/items/textItemCustomization.ts:22
+#: src/lib/preferences/customization/items/textItemCustomization.ts:23
 msgid "Show extra information in the text item"
 msgstr "Pokaż dodatkowe informacje w elemencie tekstowym"
 
@@ -1231,7 +1231,7 @@ msgid "Error Uninstalling %s"
 msgstr "Błąd odinstalowania %s"
 
 #: src/lib/preferences/dependencies/dependenciesSettings.ts:288
-#: src/lib/preferences/dependencies/dependenciesSettings.ts:382
+#: src/lib/preferences/dependencies/dependenciesSettings.ts:385
 msgid "Manage Highlight.js"
 msgstr "Zarządzaj Highlight.js"
 
@@ -1240,15 +1240,15 @@ msgid "Languages"
 msgstr "Języki"
 
 #: src/lib/preferences/dependencies/dependenciesSettings.ts:321
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:49
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:51
 msgid "Search"
 msgstr "Szukaj"
 
-#: src/lib/preferences/dependencies/dependenciesSettings.ts:375
+#: src/lib/preferences/dependencies/dependenciesSettings.ts:378
 msgid "Dependencies"
 msgstr "Zależności"
 
-#: src/lib/preferences/dependencies/dependenciesSettings.ts:383
+#: src/lib/preferences/dependencies/dependenciesSettings.ts:386
 msgid "Manage the Highlight.js installation"
 msgstr "Zarządzaj instalacją Highlight.js"
 
@@ -1498,7 +1498,7 @@ msgstr ""
 "wylogowywania lub zamykania systemu"
 
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:130 src/lib/ui/clipboardDialog.ts:235
+#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:236
 #: src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "Wyczyść"
@@ -1546,6 +1546,26 @@ msgstr "Konfiguracja"
 #: src/lib/preferences/general/locationsGroup.ts:39
 msgid "Cache"
 msgstr "Pamięć podręczna"
+
+#: src/lib/preferences/general/versionSettings.ts:15
+msgid "Unknown"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:18
+msgid "Version"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:22
+msgid "Installed build"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:31
+msgid "Copy version"
+msgstr ""
+
+#: src/lib/preferences/general/versionSettings.ts:37
+msgid "Copied to clipboard"
+msgstr ""
 
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:20
 msgid "Open Clipboard Dialog"
@@ -1653,56 +1673,56 @@ msgstr "Wyskakujące menu"
 msgid "Select Item Type"
 msgstr "Wybierz typ elementu"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:33
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:35
 msgid "Scroll"
 msgstr "Przewiń"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:51
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:53
 msgid "Toggle Pinned Search"
 msgstr "Włącz wyszukiwanie przypiętych elementów"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:52
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:55
 msgid "Clear Item Tag/Type"
 msgstr "Wyczyść typ/oznaczenie elementu"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:53
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:56
 msgid "Activate First Item"
 msgstr "Aktywny pierwszy element"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:62
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:69
 msgid "Next Item Type"
 msgstr "Następny typ elementu"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:63
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:70
 msgid "Previous Item Type"
 msgstr "Poprzedni typ elementu"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:64
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:71
 msgid "Next Item Tag"
 msgstr "Następny oznaczony element"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:65
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:72
 msgid "Previous Item Tag"
 msgstr "Poprzedni oznaczony element"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:66
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:73
 msgid "Select Item Tag"
 msgstr "Wybierz oznaczenie elementu"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:76
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:83
 msgid "Swap Scroll Shortcut"
 msgstr "Zamień skrót klawiszowy przewijania"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:77
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:84
 msgid "Swaps scroll shortcuts of cycling item types and item tags"
 msgstr ""
 "Zamienia skróty przewijania przełączania typów elementów i oznaczeń elementów"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:81
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:88
 msgid "Cycle Item Type"
 msgstr "Przełącz typ elementu"
 
-#: src/lib/preferences/shortcuts/searchShortcuts.ts:83
+#: src/lib/preferences/shortcuts/searchShortcuts.ts:90
 msgid "Cycle Item Tag"
 msgstr "Przełącz oznaczenie elementu"
 
@@ -1718,22 +1738,22 @@ msgstr "Wyłącz skrót klawiszowy"
 msgid "Disabled"
 msgstr "Wyłączono"
 
-#: src/lib/ui/components/contentInfo.ts:35
+#: src/lib/ui/components/contentInfo.ts:32
 #, javascript-format
 msgid "%dh"
 msgstr "%dgodz"
 
-#: src/lib/ui/components/contentInfo.ts:36
+#: src/lib/ui/components/contentInfo.ts:33
 #, javascript-format
 msgid "%dm"
 msgstr "%dm"
 
-#: src/lib/ui/components/contentInfo.ts:37
+#: src/lib/ui/components/contentInfo.ts:34
 #, javascript-format
 msgid "%ds"
 msgstr "%ds"
 
-#: src/lib/ui/components/contentInfo.ts:116
+#: src/lib/ui/components/contentInfo.ts:114
 #, javascript-format
 msgid "%d char"
 msgid_plural "%d chars"
@@ -1741,7 +1761,7 @@ msgstr[0] "%d znak"
 msgstr[1] "%d znaki"
 msgstr[2] "%d znaków"
 
-#: src/lib/ui/components/contentInfo.ts:123
+#: src/lib/ui/components/contentInfo.ts:122
 #, javascript-format
 msgid "%d word"
 msgid_plural "%d words"
@@ -1749,7 +1769,7 @@ msgstr[0] "%d słowo"
 msgstr[1] "%d słowa"
 msgstr[2] "%d słów"
 
-#: src/lib/ui/components/contentInfo.ts:126
+#: src/lib/ui/components/contentInfo.ts:125
 #, javascript-format
 msgid "%d line"
 msgid_plural "%d lines"
@@ -1757,15 +1777,15 @@ msgstr[0] "%d linia"
 msgstr[1] "%d linie"
 msgstr[2] "%d linii"
 
-#: src/lib/ui/components/contentInfo.ts:186
+#: src/lib/ui/components/contentInfo.ts:185
 msgid "Missing File"
 msgstr "Brakujący plik"
 
-#: src/lib/ui/components/contentInfo.ts:198
+#: src/lib/ui/components/contentInfo.ts:197
 msgid "Error"
 msgstr "Błąd"
 
-#: src/lib/ui/components/editDialog.ts:269
+#: src/lib/ui/components/editDialog.ts:272
 msgid "Edit Clipboard Item"
 msgstr "Edytuj element schowka"
 
@@ -1841,54 +1861,261 @@ msgstr "Schowek jest pusty"
 msgid "No Items Found"
 msgstr "Nie znaleziono elementów"
 
-#: src/lib/ui/searchEntry.ts:151
+#: src/lib/ui/searchEntry.ts:153
 msgid "__All"
-msgstr "__Wszystko"
-
-#: src/lib/ui/searchEntry.ts:155
-msgid "__Text"
-msgstr "__Tekst"
-
-#: src/lib/ui/searchEntry.ts:156
-msgid "__Code"
-msgstr "__Kod"
+msgstr "Wszystko"
 
 #: src/lib/ui/searchEntry.ts:157
-msgid "__Image"
-msgstr "__Obraz"
+msgid "__Text"
+msgstr "Tekst"
 
 #: src/lib/ui/searchEntry.ts:158
-msgid "__File"
-msgstr "__Plik"
+msgid "__Code"
+msgstr "Kod"
 
 #: src/lib/ui/searchEntry.ts:159
-msgid "File__s"
-msgstr "Plik_i"
+msgid "__Image"
+msgstr "Obraz"
 
 #: src/lib/ui/searchEntry.ts:160
-msgid "__Link"
-msgstr "__Odnośnik"
+msgid "__File"
+msgstr "Plik"
 
 #: src/lib/ui/searchEntry.ts:161
-msgid "C__haracter"
-msgstr "Z_nak"
+msgid "File__s"
+msgstr "Pliki"
 
 #: src/lib/ui/searchEntry.ts:162
-msgid "Colo__r"
-msgstr "Kolo_r"
+msgid "__Link"
+msgstr "Odnośnik"
 
-#: src/lib/ui/searchEntry.ts:274
+#: src/lib/ui/searchEntry.ts:163
+msgid "C__haracter"
+msgstr "Znak"
+
+#: src/lib/ui/searchEntry.ts:164
+msgid "Colo__r"
+msgstr "Kolor"
+
+#: src/lib/ui/searchEntry.ts:278
 msgid "Type to search"
 msgstr "Wpisz, aby wyszukać"
 
-#: src/prefs.ts:75
+#: src/prefs.ts:76
 msgid "General"
 msgstr "Ogólne"
 
-#: src/prefs.ts:95
+#: src/prefs.ts:97
 msgid "Customization"
 msgstr "Personalizacja"
 
-#: src/prefs.ts:112
+#: src/prefs.ts:114
 msgid "Shortcuts"
 msgstr "Skróty klawiszowe"
+
+#~ msgid "Action to perform when the middle mouse button is clicked"
+#~ msgstr "Czynność wykonywana po kliknięciu środkowym przyciskiem myszy"
+
+#~ msgid "Apps that will be excluded from clipboard history"
+#~ msgstr "Programy, które będą wykluczone z historii schowka"
+
+#~ msgid ""
+#~ "Automatically paste clipboard items when selected from clipboard history "
+#~ "(Deprecated)"
+#~ msgstr ""
+#~ "Automatycznie wklejaj elementy po wybraniu ich z historii (Przestarzałe)"
+
+#~ msgid "Background size of the preview image of the link"
+#~ msgstr "Rozmiar tła obrazu podglądu odnośnika"
+
+#~ msgid ""
+#~ "Behavior of the open clipboard dialog shortcut when the dialog is open/"
+#~ "closed."
+#~ msgstr ""
+#~ "Zachowanie skrótu otwierania okna schowka, gdy okno jest otwarte/"
+#~ "zamknięte."
+
+#~ msgid "Bottom margin of the clipboard dialog"
+#~ msgstr "Dolny margines okna dialogowego schowka"
+
+#~ msgid "Disable Gda warning"
+#~ msgstr "Wyłącz ostrzeżenie GDA"
+
+#~ msgid ""
+#~ "Disable the hljs dialog from showing up when launching preferences if "
+#~ "hljs is not installed"
+#~ msgstr ""
+#~ "Wyłącz wyświetlanie okna hljs podczas otwierania ustawień, jeśli hljs nie "
+#~ "jest zainstalowany"
+
+#~ msgid "Do not record clipboard history"
+#~ msgstr "Nie zapisuj historii schowka"
+
+#~ msgid ""
+#~ "Dynamically adjust the height of the clipboard items based on their "
+#~ "content"
+#~ msgstr ""
+#~ "Dynamicznie dostosowuj wysokość elementów schowka na podstawie ich "
+#~ "zawartości"
+
+#~ msgid "Enable syntax highlighting"
+#~ msgstr "Włącz podświetlanie składni"
+
+#~ msgid "Enable syntax highlighting in the text preview"
+#~ msgstr "Włącz podświetlanie składni w podglądzie tekstu"
+
+#~ msgid ""
+#~ "File preview shows a preview of the contents of a file. File info shows "
+#~ "some information about the file."
+#~ msgstr ""
+#~ "Podgląd pliku wyświetla zawartość pliku. Informacje o pliku wyświetlają "
+#~ "podstawowe dane o pliku."
+
+#~ msgid "Files matching these glob patterns will not have a preview"
+#~ msgstr "Pliki pasujące do tych wzorców 'glob' nie będą miały podglądu"
+
+#~ msgid "Height of a clipboard item"
+#~ msgstr "Wysokość elementu schowka"
+
+#~ msgid "Horizontal position of the clipboard dialog"
+#~ msgstr "Poziome położenie okna dialogowego schowka"
+
+#~ msgid "Left margin of the clipboard dialog"
+#~ msgstr "Lewy margines okna dialogowego schowka"
+
+#~ msgid "Links matching these regex patterns will not have a preview"
+#~ msgstr ""
+#~ "Odnośniki pasujące do tych wyrażeń regularnych nie będą miały podglądu"
+
+#~ msgid "Maximum number of characters that are recognized as a character"
+#~ msgstr "Maksymalna liczba znaków rozpoznawana jako pojedynczy znak"
+
+#~ msgid ""
+#~ "Number of minutes to keep unpinned and untagged items in the clipboard "
+#~ "history. Set to 0 to disable the time limit"
+#~ msgstr ""
+#~ "Liczba minut przechowywania nieprzypiętych i nieoznaczonych elementów w "
+#~ "historii. Ustaw na 0, aby wyłączyć limit czasu"
+
+#~ msgid ""
+#~ "Number of unpinned and untagged items to keep in the clipboard history"
+#~ msgstr ""
+#~ "Liczba nieprzypiętych i nieoznaczonych elementów zachowywanych w historii "
+#~ "schowka"
+
+#~ msgid "Orientation of the clipboard dialog"
+#~ msgstr "Orientacja okna dialogowego schowka"
+
+#~ msgid ""
+#~ "Path to the database. When empty defaults to {XDG_DATA_HOME}/{EXTENSION "
+#~ "UUID}/clipboard.{db,json} depending on the backend."
+#~ msgstr ""
+#~ "Ścieżka do bazy danych. Jeśli pozostanie pusta, domyślnie zostanie użyte "
+#~ "{XDG_DATA_HOME}/{EXTENSION UUID}/clipboard.{db,json} w zależności od "
+#~ "silnika."
+
+#~ msgid "Remember the last search"
+#~ msgstr "Zapamiętaj ostatnie wyszukiwanie"
+
+#~ msgid "Right margin of the clipboard dialog"
+#~ msgstr "Prawy margines okna dialogowego schowka"
+
+#~ msgid "Selects which backend to use for the clipboard database."
+#~ msgstr "Wybiera silnik bazy danych używany dla historii schowka."
+
+#~ msgid "Shortcut to delete a clipboard item"
+#~ msgstr "Skrót do usuwania elementu schowka"
+
+#~ msgid "Shortcut to edit a clipboard item"
+#~ msgstr "Skrót do edycji elementu schowka"
+
+#~ msgid "Shortcut to edit the title of a clipboard item"
+#~ msgstr "Skrót do edycji tytułu elementu schowka"
+
+#~ msgid "Shortcut to open the clipboard dialog"
+#~ msgstr "Skrót do otwierania okna dialogowego schowka"
+
+#~ msgid "Shortcut to open the menu of a clipboard item"
+#~ msgstr "Skrót do otwierania menu elementu schowka"
+
+#~ msgid "Shortcut to pin a clipboard item"
+#~ msgstr "Skrót do przypinania elementu schowka"
+
+#~ msgid "Shortcut to toggle incognito mode"
+#~ msgstr "Skrót do przełączania trybu prywatnego"
+
+#~ msgid "Show a preview image of the link"
+#~ msgstr "Pokazuj obraz podglądu odnośnika"
+
+#~ msgid "Show a preview of the link"
+#~ msgstr "Pokazuj podgląd odnośnika"
+
+#~ msgid "Show extra information"
+#~ msgstr "Pokazuj dodatkowe informacje"
+
+#~ msgid "Show line numbers"
+#~ msgstr "Pokazuj numery linii"
+
+#~ msgid "Show the clipboard dialog at the text cursor position"
+#~ msgstr "Pokaż okno dialogowe schowka w pozycji kursora tekstowego"
+
+#~ msgid "Show the clipboard icon in the indicator (Deprecated)"
+#~ msgstr "Pokazuj ikonę schowka na wskaźniku (Przestarzałe)"
+
+#~ msgid "Show the current clipboard content in the indicator (Deprecated)"
+#~ msgstr "Pokazuj aktualną zawartość schowka na wskaźniku (Przestarzałe)"
+
+#~ msgid "Show the header of a clipboard item"
+#~ msgstr "Pokazuj nagłówek elementu schowka"
+
+#~ msgid "Show the title of a clipboard item"
+#~ msgstr "Pokazuj tytuł elementu schowka"
+
+#~ msgid "Store clipboard history in memory instead of on disk (Deprecated)"
+#~ msgstr ""
+#~ "Przechowuj historię schowka w pamięci zamiast na dysku (Przestarzałe)"
+
+#~ msgid "Swaps copy and paste shortcuts"
+#~ msgstr "Zamienia skróty kopiowania i wklejania"
+
+#~ msgid "Tab width"
+#~ msgstr "Szerokość tabulacji"
+
+#~ msgid "The background color of clipboard items"
+#~ msgstr "Kolor tła elementów schowka"
+
+#~ msgid "The background color of the clipboard dialog"
+#~ msgstr "Kolor tła okna dialogowego schowka"
+
+#~ msgid "The background color of the search bar"
+#~ msgstr "Kolor tła paska wyszukiwania"
+
+#~ msgid "The color scheme of the custom theme"
+#~ msgstr "Schemat kolorów motywu niestandardowego"
+
+#~ msgid "The color scheme of the theme"
+#~ msgstr "Schemat kolorów motywu"
+
+#~ msgid "The preferred theme"
+#~ msgstr "Preferowany motyw"
+
+#~ msgid "The text color of the clipboard dialog"
+#~ msgstr "Kolor tekstu okna dialogowego schowka"
+
+#~ msgid "Top margin of the clipboard dialog"
+#~ msgstr "Górny margines okna dialogowego schowka"
+
+#~ msgid "Vertical position of the clipboard dialog"
+#~ msgstr "Pionowe położenie okna dialogowego schowka"
+
+#~ msgid "Visibility of the header controls of a clipboard item"
+#~ msgstr "Widoczność kontrolek nagłówka elementu schowka"
+
+#~ msgid "Volume of the sound as a decibel offset"
+#~ msgstr "Głośność dźwięku jako przesunięcie w decybelach"
+
+#~ msgid "Width of a clipboard item"
+#~ msgstr "Szerokość elementu schowka"
+
+#~ msgid "Width or height of the clipboard dialog depending on the orientation"
+#~ msgstr "Szerokość lub wysokość okna schowka w zależności od orientacji"

@@ -14,9 +14,6 @@ import { Icon, loadIcon } from '../../common/icons.js';
 import { TextCountMode } from '../../common/settings.js';
 import { FileType } from './contentPreview.js';
 
-const GraphemeSegmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
-const WordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
-
 function formatBytes(bytes: number): [string, string] {
 	const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	const exp = Math.floor(Math.log10(bytes) / 3);
@@ -110,13 +107,15 @@ export class TextInfo extends ContentInfo {
 
 	private updateCount() {
 		if (this._textCountMode === TextCountMode.Characters) {
+			const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 			let count = 0;
-			for (const _segment of GraphemeSegmenter.segment(this._text)) count++;
+			for (const _segment of segmenter.segment(this._text)) count++;
 
 			this._countLabel.text = ngettext('%d char', '%d chars', count).format(count);
 		} else if (this._textCountMode === TextCountMode.Words) {
+			const segmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
 			let count = 0;
-			for (const segment of WordSegmenter.segment(this._text)) {
+			for (const segment of segmenter.segment(this._text)) {
 				if (segment.isWordLike) count++;
 			}
 
@@ -289,7 +288,7 @@ export async function tryCreateMediaFileInfo(
 ): Promise<MediaInfo | null> {
 	try {
 		if (!Gst.is_initialized()) {
-			Gst.init(null);
+			Gst.init(undefined);
 		}
 
 		// https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/blob/ce69d1068af058425b083aaa1b8c268b1b2e5ddd/gst-libs/gst/pbutils/gstdiscoverer.c#L340
@@ -323,7 +322,7 @@ export async function tryCreateMediaFileInfo(
 		pipeline.set_state(Gst.State.NULL);
 
 		if (success && duration >= 0) {
-			return new MediaInfo(ext, size, duration / Gst.SECOND);
+			return new MediaInfo(ext, size, duration / (Gst.SECOND as unknown as number));
 		} else {
 			return null;
 		}

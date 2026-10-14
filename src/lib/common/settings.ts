@@ -114,6 +114,7 @@ export const Settings = {
 	EditItemShortcut: 'edit-item-shortcut',
 	EditTitleShortcut: 'edit-title-shortcut',
 	OpenMenuShortcut: 'open-menu-shortcut',
+	TogglePinnedSearchShortcut: 'toggle-pinned-search-shortcut',
 
 	MiddleClickAction: 'middle-click-action',
 	SwapCopyShortcut: 'swap-copy-shortcut',
@@ -196,6 +197,7 @@ export const SettingsTypes = {
 	[Settings.EditItemShortcut]: 'strv',
 	[Settings.EditTitleShortcut]: 'strv',
 	[Settings.OpenMenuShortcut]: 'strv',
+	[Settings.TogglePinnedSearchShortcut]: 'strv',
 
 	[Settings.MiddleClickAction]: 'enum',
 	[Settings.SwapCopyShortcut]: 'boolean',
@@ -431,8 +433,7 @@ export type SettingsKeys<T> = {
 }[ValueTypes];
 
 type ChangedKeys<T> =
-	| { [V in ValueTypes]: { [K in KeysWithValue<T, V>]: `changed::${K}` }[KeysWithValue<T, V>] }[ValueTypes]
-	| 'changed';
+	{ [V in ValueTypes]: { [K in KeysWithValue<T, V>]: `changed::${K}` }[KeysWithValue<T, V>] }[ValueTypes] | 'changed';
 
 type SettingsFunctions =
 	| 'get_boolean'
