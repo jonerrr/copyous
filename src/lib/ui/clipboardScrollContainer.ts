@@ -52,14 +52,21 @@ export class ClipboardScrollContainer extends St.BoxLayout {
 		this.updatePseudoclasses();
 	}
 
-	private removePseudoclasses(): void {
-		(get_first_visible_child(this) as St.Widget | null)?.remove_style_pseudo_class('first-child');
-		(get_last_visible_child(this) as St.Widget | null)?.remove_style_pseudo_class('last-child');
-	}
-
+	// Only change pseudo-classes that differ, since every change restyles and relayouts the item
 	private updatePseudoclasses(): void {
-		(get_first_visible_child(this) as St.Widget | null)?.add_style_pseudo_class('first-child');
-		(get_last_visible_child(this) as St.Widget | null)?.add_style_pseudo_class('last-child');
+		const first = get_first_visible_child(this);
+		const last = get_last_visible_child(this);
+		for (const child of this.get_children()) {
+			if (!(child instanceof St.Widget)) continue;
+			if (child.has_style_pseudo_class('first-child') !== (child === first)) {
+				if (child === first) child.add_style_pseudo_class('first-child');
+				else child.remove_style_pseudo_class('first-child');
+			}
+			if (child.has_style_pseudo_class('last-child') !== (child === last)) {
+				if (child === last) child.add_style_pseudo_class('last-child');
+				else child.remove_style_pseudo_class('last-child');
+			}
+		}
 	}
 
 	private nextFocus(child: Clutter.Actor, animate: boolean = true): void {
@@ -136,8 +143,6 @@ export class ClipboardScrollContainer extends St.BoxLayout {
 	}
 
 	private insertOrMoveItem(item: ClipboardItem, search: boolean = true): void {
-		this.removePseudoclasses();
-
 		if (item.get_parent() === this) this.remove_child(item);
 
 		let i = 0;
@@ -239,12 +244,13 @@ export class ClipboardScrollContainer extends St.BoxLayout {
 		// Copy search query, but with SearchChange.Different to always force re-search
 		this._lastQuery = query.withChange(SearchChange.Different);
 
-		this.removePseudoclasses();
 		let focusChild: ClipboardItem | null = null;
+		let hadFocus = false;
 		let firstVisible: ClipboardItem | null = null;
 		for (const child of this.get_children()) {
 			if (child instanceof ClipboardItem) {
 				const hasFocus = child.has_key_focus();
+				hadFocus ||= hasFocus;
 				child.search(query);
 				if (hasFocus) focusChild = child;
 				if (child.visible && firstVisible === null) firstVisible = child;
@@ -256,7 +262,7 @@ export class ClipboardScrollContainer extends St.BoxLayout {
 			this.focusChild(focusChild, false);
 		} else if (this._lastFocus && this._lastFocus.visible) {
 			this.scrollToChild(this._lastFocus, false);
-		} else if (firstVisible !== null) {
+		} else if (hadFocus && firstVisible !== null) {
 			this.focusChild(firstVisible, false);
 		}
 	}
@@ -265,7 +271,6 @@ export class ClipboardScrollContainer extends St.BoxLayout {
 		if (!this._lastQuery) return;
 
 		const hasKeyFocus = item.has_key_focus();
-		this.removePseudoclasses();
 		item.search(this._lastQuery);
 		this.updateVisible();
 		if (hasKeyFocus && !item.visible) this.nextFocus(item, false);

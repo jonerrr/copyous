@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-12 23:52+0000\n"
+"POT-Creation-Date: 2026-11-06 13:53+0000\n"
 "PO-Revision-Date: 2025-11-30 20:29+0700\n"
 "Last-Translator: Victor <firephantom303@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -90,20 +90,20 @@ msgstr ""
 msgid "Copied Text"
 msgstr "Скопирован текст"
 
-#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:123
+#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:125
 msgid "Copied Image"
 msgstr "Скопировано изображение"
 
-#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:129
+#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:131
 #, javascript-format
 msgid "Size: %d×%d px"
 msgstr "Размер: %d×%d пикс"
 
-#: src/lib/misc/notifications.ts:118
+#: src/lib/misc/notifications.ts:119
 msgid "Copied Code"
 msgstr "Скопирован код"
 
-#: src/lib/misc/notifications.ts:142
+#: src/lib/misc/notifications.ts:144
 #, javascript-format
 msgid "Copied %d File"
 msgid_plural "Copied %d Files"
@@ -111,15 +111,15 @@ msgstr[0] "Скопирован %d файл"
 msgstr[1] "Скопировано %d файла"
 msgstr[2] "Скопировано %d файлов"
 
-#: src/lib/misc/notifications.ts:148
+#: src/lib/misc/notifications.ts:150
 msgid "Copied Link"
 msgstr "Скопирована ссылка"
 
-#: src/lib/misc/notifications.ts:152
+#: src/lib/misc/notifications.ts:154
 msgid "Copied Character"
 msgstr "Скопирован символ"
 
-#: src/lib/misc/notifications.ts:156
+#: src/lib/misc/notifications.ts:158
 msgid "Copied Color"
 msgstr "Скопирован цвет"
 
@@ -180,7 +180,7 @@ msgstr "Файлы"
 #: src/lib/preferences/actions/actionDialog.ts:180
 #: src/lib/preferences/actions/actionDialog.ts:379
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:45
-#: src/lib/ui/items/linkItem.ts:303
+#: src/lib/ui/items/linkItem.ts:308
 msgid "Link"
 msgstr "Ссылка"
 
@@ -1054,66 +1054,70 @@ msgid "Set the preferred theme"
 msgstr ""
 
 #: src/lib/preferences/customization/themeCustomization.ts:75
+msgid "Automatic"
+msgstr ""
+
+#: src/lib/preferences/customization/themeCustomization.ts:75
 msgid "Yaru"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:89
-#: src/lib/preferences/customization/themeCustomization.ts:96
+#: src/lib/preferences/customization/themeCustomization.ts:91
+#: src/lib/preferences/customization/themeCustomization.ts:98
 msgid "Color Scheme"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:90
-#: src/lib/preferences/customization/themeCustomization.ts:97
+#: src/lib/preferences/customization/themeCustomization.ts:92
+#: src/lib/preferences/customization/themeCustomization.ts:99
 msgid "Set the color scheme of the theme"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
-#: src/lib/preferences/customization/themeCustomization.ts:98
+#: src/lib/preferences/customization/themeCustomization.ts:93
+#: src/lib/preferences/customization/themeCustomization.ts:100
 msgid "Dark"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
+#: src/lib/preferences/customization/themeCustomization.ts:93
 msgid "High Contrast"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
-#: src/lib/preferences/customization/themeCustomization.ts:98
+#: src/lib/preferences/customization/themeCustomization.ts:93
+#: src/lib/preferences/customization/themeCustomization.ts:100
 msgid "Light"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
+#: src/lib/preferences/customization/themeCustomization.ts:93
 msgid "System"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:104
+#: src/lib/preferences/customization/themeCustomization.ts:106
 msgid "Background Color"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:105
+#: src/lib/preferences/customization/themeCustomization.ts:107
 msgid "Set the background color of the clipboard dialog"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:111
+#: src/lib/preferences/customization/themeCustomization.ts:113
 msgid "Text Color"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:112
+#: src/lib/preferences/customization/themeCustomization.ts:114
 msgid "Set the text color of the clipboard dialog"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:118
+#: src/lib/preferences/customization/themeCustomization.ts:120
 msgid "Item Color"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:119
+#: src/lib/preferences/customization/themeCustomization.ts:121
 msgid "Set the background color of clipboard items"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:125
+#: src/lib/preferences/customization/themeCustomization.ts:127
 msgid "Search Color"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:126
+#: src/lib/preferences/customization/themeCustomization.ts:128
 msgid "Set the background color of the search bar"
 msgstr ""
 
@@ -1288,61 +1292,70 @@ msgid "Behavior"
 msgstr "Поведение"
 
 #: src/lib/preferences/general/behaviorSettings.ts:18
+msgid "Paste on Copy"
+msgstr "Вставлять при копировании"
+
+#: src/lib/preferences/general/behaviorSettings.ts:19
+msgid ""
+"Automatically paste clipboard items when selected from clipboard history"
+msgstr "Автоматически вставлять элементы буфера обмена при выборе из истории"
+
+#: src/lib/preferences/general/behaviorSettings.ts:24
 msgid "Remember Search Query"
 msgstr "Запоминать поисковый запрос"
 
-#: src/lib/preferences/general/behaviorSettings.ts:19
+#: src/lib/preferences/general/behaviorSettings.ts:25
 msgid ""
 "Remember the search query when closing and reopening the clipboard dialog"
 msgstr ""
 "Запоминать поисковый запрос при закрытии и повторном открытии диалогового "
 "окна буфера обмена"
 
-#: src/lib/preferences/general/behaviorSettings.ts:24
+#: src/lib/preferences/general/behaviorSettings.ts:30
 msgid "Exclude Pinned Items from Main View"
 msgstr "Исключать закреплённые элементы из основного вида"
 
-#: src/lib/preferences/general/behaviorSettings.ts:25
+#: src/lib/preferences/general/behaviorSettings.ts:31
 msgid "Pinned items appear only when searching for pinned items"
 msgstr "Закреплённые элементы отображаются только при поиске по закреплённым"
 
-#: src/lib/preferences/general/behaviorSettings.ts:30
+#: src/lib/preferences/general/behaviorSettings.ts:36
 msgid "Exclude Tagged Items from Main View"
 msgstr "Исключать помеченные элементы из основного вида"
 
-#: src/lib/preferences/general/behaviorSettings.ts:31
+#: src/lib/preferences/general/behaviorSettings.ts:37
 msgid "Tagged items appear only when searching for tagged items"
 msgstr "Помеченные элементы отображаются только при поиске по меткам"
 
-#: src/lib/preferences/general/behaviorSettings.ts:36
+#: src/lib/preferences/general/behaviorSettings.ts:42
 msgid "Protect Pinned Items"
 msgstr "Защищать закреплённые элементы"
 
-#: src/lib/preferences/general/behaviorSettings.ts:37
+#: src/lib/preferences/general/behaviorSettings.ts:43
 msgid "Prevents pinned clipboard items from being deleted"
 msgstr "Не позволяет удалять закреплённые элементы буфера обмена"
 
-#: src/lib/preferences/general/behaviorSettings.ts:42
+#: src/lib/preferences/general/behaviorSettings.ts:48
 msgid "Protect Tagged Items"
 msgstr "Защищать помеченные элементы"
 
-#: src/lib/preferences/general/behaviorSettings.ts:43
+#: src/lib/preferences/general/behaviorSettings.ts:49
 msgid "Prevents tagged clipboard items from being deleted"
 msgstr "Не позволяет удалять помеченные элементы буфера обмена"
 
-#: src/lib/preferences/general/behaviorSettings.ts:48
+#: src/lib/preferences/general/behaviorSettings.ts:54
 msgid "Sync Primary Clipboard"
 msgstr "Синхронизировать основной буфер обмена"
 
-#: src/lib/preferences/general/behaviorSettings.ts:49
+#: src/lib/preferences/general/behaviorSettings.ts:55
 msgid "Also copy clipboard items to the primary clipboard"
 msgstr "Также копировать элементы в основной буфер обмена"
 
-#: src/lib/preferences/general/behaviorSettings.ts:54
+#: src/lib/preferences/general/behaviorSettings.ts:60
 msgid "Update Date on Copy"
 msgstr "Обновлять дату при копировании"
 
-#: src/lib/preferences/general/behaviorSettings.ts:55
+#: src/lib/preferences/general/behaviorSettings.ts:61
 msgid ""
 "Update the copied date of clipboard items when selected from clipboard "
 "history"
@@ -1483,7 +1496,7 @@ msgstr ""
 "системы или её завершении"
 
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:236
+#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:239
 #: src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "Очистить"
@@ -1606,23 +1619,23 @@ msgstr "Открыть меню"
 msgid "Middle Click Action"
 msgstr "Действие средней кнопки мыши"
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:67
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:73
 msgid "Swap Copy Shortcut"
 msgstr ""
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:68
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:74
 msgid "Swap copy and paste shortcuts"
 msgstr ""
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:72
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:79
 msgid "Paste Item"
 msgstr ""
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:74
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:81
 msgid "Copy Item"
 msgstr "Копировать элемент"
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:76
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:83
 msgid "Activate Default Action"
 msgstr "Активировать действие по умолчанию"
 
@@ -1722,22 +1735,22 @@ msgstr "Отключить сочетание клавиш"
 msgid "Disabled"
 msgstr "Отключено"
 
-#: src/lib/ui/components/contentInfo.ts:32
+#: src/lib/ui/components/contentInfo.ts:31
 #, javascript-format
 msgid "%dh"
 msgstr ""
 
-#: src/lib/ui/components/contentInfo.ts:33
+#: src/lib/ui/components/contentInfo.ts:32
 #, javascript-format
 msgid "%dm"
 msgstr ""
 
-#: src/lib/ui/components/contentInfo.ts:34
+#: src/lib/ui/components/contentInfo.ts:33
 #, javascript-format
 msgid "%ds"
 msgstr ""
 
-#: src/lib/ui/components/contentInfo.ts:114
+#: src/lib/ui/components/contentInfo.ts:113
 #, javascript-format
 msgid "%d char"
 msgid_plural "%d chars"
@@ -1745,7 +1758,7 @@ msgstr[0] "%d символ"
 msgstr[1] "%d символа"
 msgstr[2] "%d символов"
 
-#: src/lib/ui/components/contentInfo.ts:122
+#: src/lib/ui/components/contentInfo.ts:121
 #, javascript-format
 msgid "%d word"
 msgid_plural "%d words"
@@ -1753,7 +1766,7 @@ msgstr[0] "%d слово"
 msgstr[1] "%d слова"
 msgstr[2] "%d слов"
 
-#: src/lib/ui/components/contentInfo.ts:125
+#: src/lib/ui/components/contentInfo.ts:124
 #, javascript-format
 msgid "%d line"
 msgid_plural "%d lines"
@@ -1761,11 +1774,11 @@ msgstr[0] "%d строка"
 msgstr[1] "%d строки"
 msgstr[2] "%d строк"
 
-#: src/lib/ui/components/contentInfo.ts:185
+#: src/lib/ui/components/contentInfo.ts:184
 msgid "Missing File"
 msgstr "Файл отсутствует"
 
-#: src/lib/ui/components/contentInfo.ts:197
+#: src/lib/ui/components/contentInfo.ts:196
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1801,7 +1814,7 @@ msgstr "Очистить историю"
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/lib/ui/indicator.ts:199
+#: src/lib/ui/indicator.ts:195
 #, javascript-format
 msgid "%d File"
 msgid_plural "%d Files"
@@ -1845,43 +1858,43 @@ msgstr "Буфер обмена пуст"
 msgid "No Items Found"
 msgstr "Элементы не найдены"
 
-#: src/lib/ui/searchEntry.ts:153
+#: src/lib/ui/searchEntry.ts:164
 msgid "__All"
 msgstr "__Все"
 
-#: src/lib/ui/searchEntry.ts:157
+#: src/lib/ui/searchEntry.ts:168
 msgid "__Text"
 msgstr "__Текст"
 
-#: src/lib/ui/searchEntry.ts:158
+#: src/lib/ui/searchEntry.ts:169
 msgid "__Code"
 msgstr "__Код"
 
-#: src/lib/ui/searchEntry.ts:159
+#: src/lib/ui/searchEntry.ts:170
 msgid "__Image"
 msgstr "__Изобр"
 
-#: src/lib/ui/searchEntry.ts:160
+#: src/lib/ui/searchEntry.ts:171
 msgid "__File"
 msgstr "__Файл"
 
-#: src/lib/ui/searchEntry.ts:161
+#: src/lib/ui/searchEntry.ts:172
 msgid "File__s"
 msgstr "Фай__лы"
 
-#: src/lib/ui/searchEntry.ts:162
+#: src/lib/ui/searchEntry.ts:173
 msgid "__Link"
 msgstr "__Ссылка"
 
-#: src/lib/ui/searchEntry.ts:163
+#: src/lib/ui/searchEntry.ts:174
 msgid "C__haracter"
 msgstr "С__имвол"
 
-#: src/lib/ui/searchEntry.ts:164
+#: src/lib/ui/searchEntry.ts:175
 msgid "Colo__r"
 msgstr "Цв__ет"
 
-#: src/lib/ui/searchEntry.ts:278
+#: src/lib/ui/searchEntry.ts:290
 msgid "Type to search"
 msgstr "Введите текст для поиска"
 
@@ -1897,16 +1910,8 @@ msgstr "Настройка вида"
 msgid "Shortcuts"
 msgstr "Сочетания клавиш"
 
-#~ msgid ""
-#~ "Automatically paste clipboard items when selected from clipboard history"
-#~ msgstr ""
-#~ "Автоматически вставлять элементы буфера обмена при выборе из истории"
-
 #~ msgid "Failed to load database"
 #~ msgstr "Не удалось загрузить базу данных"
-
-#~ msgid "Paste on Copy"
-#~ msgstr "Вставлять при копировании"
 
 #~ msgid "Show Indicator"
 #~ msgstr "Показывать индикатор"

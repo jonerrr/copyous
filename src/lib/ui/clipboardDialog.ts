@@ -165,8 +165,11 @@ class ClipboardDialogHeader extends St.Widget {
 
 		this._headerLayout.enableCollapse = this.ext.settings.get_boolean('auto-hide-search');
 
-		this._headerVisible = !this._headerVisible || show;
-		this.notify('header-visible');
+		// Only notify on changes, since the dialog restyles all items when the header visibility changes
+		if (this._headerVisible !== show) {
+			this._headerVisible = show;
+			this.notify('header-visible');
+		}
 
 		const value = Number(show);
 		if (animate) {
@@ -254,7 +257,7 @@ class ClipboardDialogFooter extends St.BoxLayout {
 		'clear-history': { param_types: [GObject.TYPE_INT] },
 	},
 })
-export class ClipboardDialog extends St.Widget {
+export class ClipboardDialog extends Clutter.Actor {
 	private _grab: Clutter.Grab | null = null;
 	private _open: boolean = false;
 	private _closing: boolean = false;
@@ -442,12 +445,15 @@ export class ClipboardDialog extends St.Widget {
 		this._updateCursor = false;
 		this._nextCursor = this._cursor;
 
+		// Capture whether the focused application is a terminal
+		this.ext.clipboardManager?.savePasteTarget();
+
 		const grab = Main.pushModal(this, { actionMode: Shell.ActionMode.SYSTEM_MODAL }) as Clutter.Grab;
 		// GNOME 50 (Mutter 18) removed get_seat_state()/GrabState in favor of is_revoked()
 		const grabFailed =
 			VERSION >= 50
 				? (grab as Clutter.Grab & { is_revoked(): boolean }).is_revoked()
-				: (grab as Clutter.Grab & { get_seat_state(): number }).get_seat_state() !== 1; // Clutter.GrabState.ALL
+				: (grab as Clutter.Grab & { get_seat_state(): number }).get_seat_state() !== 3; // Clutter.GrabState.ALL
 		if (grabFailed) {
 			Main.popModal(grab);
 			return;
@@ -800,6 +806,15 @@ export class ClipboardDialog extends St.Widget {
 		// Trigger search
 		if (!event.has_control_modifier() && this.shouldTriggerSearch(key)) {
 			this._header.searchEntry.clutter_text.grab_key_focus();
+			if (VERSION >= 51) {
+				for (const action of this._header.searchEntry.clutter_text.get_actions()) {
+					if (action instanceof Clutter.KeyController) {
+						action.vfunc_handle_event(event);
+					}
+				}
+				return Clutter.EVENT_STOP;
+			}
+
 			return this._header.searchEntry.clutter_text.event(event, false);
 		}
 
@@ -843,7 +858,8 @@ export class ClipboardDialog extends St.Widget {
 		}
 
 		// Navigate
-		if (global.focus_manager.navigate_from_event) {
+		// St.FocusManager.navigate_from_event was removed from St in GNOME 51
+		if (VERSION < 51 && global.focus_manager.navigate_from_event) {
 			if (global.focus_manager.navigate_from_event(event)) return Clutter.EVENT_STOP;
 		} else {
 			let direction: St.DirectionType | undefined;

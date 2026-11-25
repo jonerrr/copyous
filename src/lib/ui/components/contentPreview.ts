@@ -8,11 +8,17 @@ import St from 'gi://St';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import type CopyousExtension from '../../../extension.js';
-import { ActiveState, getCachePath } from '../../common/constants.js';
+import { ActiveState, PREVIEW_MAX_WIDTH, getImagePreviewPath } from '../../common/constants.js';
 import { enumParamSpec, flagsParamSpec, registerClass } from '../../common/gjs.js';
 import { Icon, loadIcon } from '../../common/icons.js';
 import { BackgroundSize, FilePreviewType } from '../../common/settings.js';
 import { CodeLabel, CodeLabelConstructorProps } from './codeLabel.js';
+
+Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
+Gio._promisify(Gio.File.prototype, 'read_async');
+Gio._promisify(Gio.File.prototype, 'replace_async');
+Gio._promisify(Gio.OutputStream.prototype, 'close_async');
+Gio._promisify(Gio.InputStream.prototype, 'read_bytes_async');
 
 export const FileType = {
 	Unknown: 'Unknown',
@@ -38,43 +44,106 @@ export class ContentPreview extends St.BoxLayout {
 }
 
 /**
- * Largest image edge that is passed to St as a background-image directly.
- * Anything larger gets a cached downscaled copy, since St crashes gnome-shell
- * when the texture cache fails to load an image (e.g. one that exceeds
- * GL_MAX_TEXTURE_SIZE, usually 16384px).
+ * Images up to this size are passed to St as a background-image directly. Anything larger gets a cached
+ * downscaled copy, since St crashes gnome-shell when the texture cache fails to load an image (e.g. one that
+ * exceeds GL_MAX_TEXTURE_SIZE, usually 16384px), and since the rounded image box is redrawn with cairo at the
+ * source resolution on every style change (~30ms for a 2516px wide screenshot vs ~2ms downscaled).
  */
-const MAX_PREVIEW_EDGE = 4096;
-const PREVIEW_TARGET_EDGE = 1024;
+const PREVIEW_MAX_HEIGHT = 4096;
 
 /**
- * Gets a file that is safe to use as a preview background-image
+ * Gets the size of an image. PNG sizes are read from the header directly, since GdkPixbuf.get_file_info can go
+ * through a sandboxed glycin loader, which takes 100-150ms for a large screenshot.
+ * @param image The image
+ * @returns The width and height of the image
+ */
+function getImageSize(image: Gio.File): [number, number] {
+	try {
+		const stream = image.read(null);
+		const header = stream.read_bytes(24, null).toArray();
+		stream.close(null);
+
+		const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+		const ihdr = String.fromCharCode(...header.slice(12, 16));
+		if (header.length === 24 && signature.every((b, i) => header[i] === b) && ihdr === 'IHDR') {
+			const view = new DataView(header.buffer, header.byteOffset, header.byteLength);
+			const width = view.getUint32(16);
+			const height = view.getUint32(20);
+			if (width > 0 && height > 0) return [width, height];
+		}
+	} catch {
+		// Fall back to GdkPixbuf
+	}
+
+	const [format, width, height] = GdkPixbuf.Pixbuf.get_file_info(image.get_path()!);
+	if (format === null) throw new Error('Unknown image format');
+	return [width, height];
+}
+
+/**
+ * Gets the file to use as a preview background-image
  * @param ext The extension
  * @param image The original image
  * @param width The width of the original image
  * @param height The height of the original image
- * @returns The original image if it is small enough, otherwise a cached downscaled copy
+ * @returns The original image if it is small enough, otherwise the cached downscaled copy, and whether it exists
  */
-function getSafePreviewFile(ext: Extension, image: Gio.File, width: number, height: number): Gio.File {
-	if (width <= MAX_PREVIEW_EDGE && height <= MAX_PREVIEW_EDGE) return image;
+function getPreviewFile(ext: Extension, image: Gio.File, width: number, height: number): [Gio.File, boolean] {
+	if (width <= PREVIEW_MAX_WIDTH && height <= PREVIEW_MAX_HEIGHT) return [image, true];
 
-	const uri = image.get_uri();
-	const key = GLib.compute_checksum_for_string(GLib.ChecksumType.MD5, uri, uri.length);
-	const previewDir = getCachePath(ext).get_child('previews');
+	const preview = getImagePreviewPath(ext, image);
+	return [preview, preview.query_exists(null)];
+}
+
+/**
+ * Creates a downscaled copy of an image. Decoding and encoding run in worker threads, since a large
+ * screenshot would block the shell for several hundred milliseconds.
+ * @param image The original image
+ * @param preview The file to save the downscaled copy to
+ * @param cancellable The cancellable
+ */
+async function createPreviewFile(image: Gio.File, preview: Gio.File, cancellable: Gio.Cancellable): Promise<void> {
+	const previewDir = preview.get_parent()!;
 	if (!previewDir.query_exists(null)) previewDir.make_directory_with_parents(null);
 
-	const preview = previewDir.get_child(`${key}.png`);
-	if (!preview.query_exists(null)) {
-		const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-			image.get_path()!,
-			PREVIEW_TARGET_EDGE,
-			PREVIEW_TARGET_EDGE,
+	// Scale to the maximum width, keeping the aspect ratio unless the image is extremely tall
+	const input = await image.read_async(GLib.PRIORITY_DEFAULT, cancellable);
+	const pixbuf = await new Promise<GdkPixbuf.Pixbuf>((resolve, reject: (reason: Error) => void) => {
+		GdkPixbuf.Pixbuf.new_from_stream_at_scale_async(
+			input,
+			PREVIEW_MAX_WIDTH,
+			PREVIEW_MAX_HEIGHT,
 			true,
+			cancellable,
+			(_source, result) => {
+				try {
+					resolve(GdkPixbuf.Pixbuf.new_from_stream_finish(result));
+				} catch (error) {
+					reject(error as Error);
+				}
+			},
 		);
-		if (!pixbuf.savev(preview.get_path()!, 'png', [], [])) {
-			throw new Error('Failed to save downscaled preview');
-		}
-	}
-	return preview;
+	}).finally(() => input.close(null));
+
+	// replace() writes to a temporary file that is renamed on close, so a partial preview is never used
+	const output = await preview.replace_async(
+		null,
+		false,
+		Gio.FileCreateFlags.REPLACE_DESTINATION,
+		GLib.PRIORITY_DEFAULT,
+		cancellable,
+	);
+	await new Promise<void>((resolve, reject: (reason: Error) => void) => {
+		pixbuf.save_to_streamv_async(output, 'png', ['compression'], ['1'], cancellable, (_source, result) => {
+			try {
+				GdkPixbuf.Pixbuf.save_to_stream_finish(result);
+				resolve();
+			} catch (error) {
+				reject(error as Error);
+			}
+		});
+	});
+	await output.close_async(GLib.PRIORITY_DEFAULT, null);
 }
 
 @registerClass({
@@ -92,26 +161,41 @@ export class ImagePreview extends ContentPreview {
 	private _backgroundSize: BackgroundSize = BackgroundSize.Cover;
 	private readonly _ratio: number | null;
 	private readonly _effect?: Clutter.BrightnessContrastEffect;
+	private readonly _cancellable: Gio.Cancellable = new Gio.Cancellable();
 
-	constructor(ext: Extension, image: Gio.File) {
+	constructor(ext: CopyousExtension, image: Gio.File) {
 		super();
 
 		this.add_style_class_name('image-preview');
 
 		if (image.query_exists(null)) {
 			try {
-				const [, width, height] = GdkPixbuf.Pixbuf.get_file_info(image.get_path()!);
+				const [width, height] = getImageSize(image);
 				this._ratio = height / width;
 
-				const previewFile = getSafePreviewFile(ext, image, width, height);
+				const [previewFile, exists] = getPreviewFile(ext, image, width, height);
 				const imageBox = new St.Widget({
 					style_class: 'image-box',
 					x_align: Clutter.ActorAlign.FILL,
 					y_align: Clutter.ActorAlign.FILL,
 					x_expand: true,
 					y_expand: true,
-					style: `background-image: url("${previewFile.get_uri()}");`,
 				});
+
+				const style = `background-image: url("${previewFile.get_uri()}");`;
+				if (exists) {
+					imageBox.style = style;
+				} else {
+					createPreviewFile(image, previewFile, this._cancellable)
+						.then(() => {
+							if (!this._cancellable.is_cancelled()) {
+								imageBox.style = style;
+							}
+						})
+						.catch((error: unknown) => {
+							if (!this._cancellable.is_cancelled()) ext.logger.error(error);
+						});
+				}
 				this.add_child(imageBox);
 
 				this._effect = new Clutter.BrightnessContrastEffect();
@@ -134,6 +218,11 @@ export class ImagePreview extends ContentPreview {
 				min_height: 0,
 			}),
 		);
+	}
+
+	override destroy() {
+		this._cancellable.cancel();
+		super.destroy();
 	}
 
 	get backgroundSize() {
@@ -219,20 +308,26 @@ export class TextPreview extends ContentPreview {
 	}
 }
 
-Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
-Gio._promisify(Gio.File.prototype, 'read_async');
-Gio._promisify(Gio.InputStream.prototype, 'read_bytes_async');
-
 /**
  * Creates a text preview by reading the first 4096 bytes
  * @returns The text preview
  */
-async function createTextPreview(ext: CopyousExtension, file: Gio.File): Promise<TextPreview> {
+async function createTextPreview(
+	ext: CopyousExtension,
+	file: Gio.File,
+	cancellable: Gio.Cancellable | null,
+): Promise<TextPreview> {
 	const extension = file.get_uri().match(/\.(\w+)$/)?.[1];
-	const stream = await file.read_async(GLib.PRIORITY_DEFAULT, null);
-	const bytes = await stream.read_bytes_async(4096, GLib.PRIORITY_DEFAULT, null);
-	const text = new TextDecoder().decode(bytes.toArray());
-	return new TextPreview(ext, text, extension);
+
+	let stream: Gio.FileInputStream = null!;
+	try {
+		stream = await file.read_async(GLib.PRIORITY_DEFAULT, cancellable);
+		const bytes = await stream.read_bytes_async(4096, GLib.PRIORITY_DEFAULT, cancellable);
+		const text = new TextDecoder().decode(bytes.toArray());
+		return new TextPreview(ext, text, extension);
+	} finally {
+		stream.close(null);
+	}
 }
 
 /**
@@ -332,6 +427,7 @@ export async function getFileType(file: Gio.File): Promise<[FileType, Gio.File |
  * @param file The file to create a preview for
  * @param fileType The type of the file
  * @param thumbnail The thumbnail of the file if it exists
+ * @param cancellable The cancellable
  * @returns the created file preview or null if either the file preview could not be created or if it is not allowed
  */
 export async function tryCreateFilePreview(
@@ -339,7 +435,9 @@ export async function tryCreateFilePreview(
 	file: Gio.File,
 	fileType: FileType,
 	thumbnail: Gio.File | null,
+	cancellable: Gio.Cancellable | null = null,
 ): Promise<ContentPreview | null> {
+	if (cancellable?.is_cancelled()) return null;
 	const allowedTypes = ext.settings.get_child('file-item').get_flags('file-preview-types');
 
 	try {
@@ -347,14 +445,14 @@ export async function tryCreateFilePreview(
 
 		switch (fileType) {
 			case FileType.Text:
-				return allowedTypes & FilePreviewType.Text ? await createTextPreview(ext, file) : null;
+				return allowedTypes & FilePreviewType.Text ? await createTextPreview(ext, file, cancellable) : null;
 			case FileType.Image:
 				return allowedTypes & FilePreviewType.Image ? new ImagePreview(ext, file) : null;
 		}
 
 		return thumbnail && allowedTypes & FilePreviewType.Thumbnail ? new ThumbnailPreview(ext, file) : null;
 	} catch (error) {
-		ext.logger.error(error);
+		if (!cancellable?.is_cancelled()) ext.logger.error(error);
 		return null;
 	}
 }

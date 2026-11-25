@@ -12,6 +12,7 @@
 		"@girs/gnome-shell": "50.0.4",
 		"@girs/gsound-1.0": "5.5.0",
 		"@girs/gst-1.0": "5.5.0",
+		"@girs/gstpbutils-1.0": "5.5.0",
 		"@girs/soup-3.0": "5.5.0",
 		"@stylistic/eslint-plugin": "5.10.0",
 		"@trivago/prettier-plugin-sort-imports": "6.0.2",
@@ -28,7 +29,9 @@
 		"postcss-scss": "4.0.9",
 		"prettier": "3.9.9",
 		"sass": "1.105.1",
-		"source-map": "^0.8.0",
+		"source-map": "0.8.0",
+		"tsc-alias": "1.9.7",
+		"tslib": "2.8.1",
 		"tsx": "4.23.15",
 		"typescript": "6.0.3",
 		"typescript-eslint": "8.71.1"
@@ -38,6 +41,8 @@
 		"install": "make install",
 		"launch": "make launch",
 		"launch-settings": "make launch-settings",
+		"launch-toolbox": "make launch-toolbox",
+		"test": "make test",
 		"lint": "make lint",
 		"lint-fix": "make lint-fix",
 		"shexli": "make shexli"

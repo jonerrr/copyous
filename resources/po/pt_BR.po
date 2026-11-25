@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-12 23:52+0000\n"
+"POT-Creation-Date: 2026-11-06 13:53+0000\n"
 "PO-Revision-Date: 2025-12-01 18:02-0300\n"
 "Last-Translator: Murilo Leal <murilormleal@outlook.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -87,35 +87,35 @@ msgstr ""
 msgid "Copied Text"
 msgstr "Texto copiado"
 
-#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:123
+#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:125
 msgid "Copied Image"
 msgstr "Imagem copiada"
 
-#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:129
+#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:131
 #, javascript-format
 msgid "Size: %d×%d px"
 msgstr "Tamanho: %d×%d px"
 
-#: src/lib/misc/notifications.ts:118
+#: src/lib/misc/notifications.ts:119
 msgid "Copied Code"
 msgstr "Código copiado"
 
-#: src/lib/misc/notifications.ts:142
+#: src/lib/misc/notifications.ts:144
 #, javascript-format
 msgid "Copied %d File"
 msgid_plural "Copied %d Files"
 msgstr[0] "Arquivo %d copiado"
 msgstr[1] "Arquivos %d copiados"
 
-#: src/lib/misc/notifications.ts:148
+#: src/lib/misc/notifications.ts:150
 msgid "Copied Link"
 msgstr "Link copiado"
 
-#: src/lib/misc/notifications.ts:152
+#: src/lib/misc/notifications.ts:154
 msgid "Copied Character"
 msgstr "Caractere copiado"
 
-#: src/lib/misc/notifications.ts:156
+#: src/lib/misc/notifications.ts:158
 msgid "Copied Color"
 msgstr "Cor copiada"
 
@@ -176,7 +176,7 @@ msgstr "Arquivos"
 #: src/lib/preferences/actions/actionDialog.ts:180
 #: src/lib/preferences/actions/actionDialog.ts:379
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:45
-#: src/lib/ui/items/linkItem.ts:303
+#: src/lib/ui/items/linkItem.ts:308
 msgid "Link"
 msgstr "Link"
 
@@ -1056,66 +1056,70 @@ msgid "Set the preferred theme"
 msgstr "Selecione o tema preferido"
 
 #: src/lib/preferences/customization/themeCustomization.ts:75
+msgid "Automatic"
+msgstr ""
+
+#: src/lib/preferences/customization/themeCustomization.ts:75
 msgid "Yaru"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:89
-#: src/lib/preferences/customization/themeCustomization.ts:96
+#: src/lib/preferences/customization/themeCustomization.ts:91
+#: src/lib/preferences/customization/themeCustomization.ts:98
 msgid "Color Scheme"
 msgstr "Esquema de Cor"
 
-#: src/lib/preferences/customization/themeCustomization.ts:90
-#: src/lib/preferences/customization/themeCustomization.ts:97
+#: src/lib/preferences/customization/themeCustomization.ts:92
+#: src/lib/preferences/customization/themeCustomization.ts:99
 msgid "Set the color scheme of the theme"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
-#: src/lib/preferences/customization/themeCustomization.ts:98
+#: src/lib/preferences/customization/themeCustomization.ts:93
+#: src/lib/preferences/customization/themeCustomization.ts:100
 msgid "Dark"
 msgstr "Escuro"
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
+#: src/lib/preferences/customization/themeCustomization.ts:93
 msgid "High Contrast"
 msgstr ""
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
-#: src/lib/preferences/customization/themeCustomization.ts:98
+#: src/lib/preferences/customization/themeCustomization.ts:93
+#: src/lib/preferences/customization/themeCustomization.ts:100
 msgid "Light"
 msgstr "Claro"
 
-#: src/lib/preferences/customization/themeCustomization.ts:91
+#: src/lib/preferences/customization/themeCustomization.ts:93
 msgid "System"
 msgstr "Sistema"
 
-#: src/lib/preferences/customization/themeCustomization.ts:104
+#: src/lib/preferences/customization/themeCustomization.ts:106
 msgid "Background Color"
 msgstr "Cor do plano de fundo"
 
-#: src/lib/preferences/customization/themeCustomization.ts:105
+#: src/lib/preferences/customization/themeCustomization.ts:107
 msgid "Set the background color of the clipboard dialog"
 msgstr "Selecione a cor de fundo da caixa de área de transferência"
 
-#: src/lib/preferences/customization/themeCustomization.ts:111
+#: src/lib/preferences/customization/themeCustomization.ts:113
 msgid "Text Color"
 msgstr "Cor do Texto"
 
-#: src/lib/preferences/customization/themeCustomization.ts:112
+#: src/lib/preferences/customization/themeCustomization.ts:114
 msgid "Set the text color of the clipboard dialog"
 msgstr "Selecione a cor do texto da caixa de área de transferência"
 
-#: src/lib/preferences/customization/themeCustomization.ts:118
+#: src/lib/preferences/customization/themeCustomization.ts:120
 msgid "Item Color"
 msgstr "Cor do Item"
 
-#: src/lib/preferences/customization/themeCustomization.ts:119
+#: src/lib/preferences/customization/themeCustomization.ts:121
 msgid "Set the background color of clipboard items"
 msgstr "Selecione a cor de fundo dos itens da área de transferência"
 
-#: src/lib/preferences/customization/themeCustomization.ts:125
+#: src/lib/preferences/customization/themeCustomization.ts:127
 msgid "Search Color"
 msgstr "Pesquisar Cor"
 
-#: src/lib/preferences/customization/themeCustomization.ts:126
+#: src/lib/preferences/customization/themeCustomization.ts:128
 msgid "Set the background color of the search bar"
 msgstr "Selecione a cor de fundo da barra de pesquisa"
 
@@ -1293,61 +1297,72 @@ msgid "Behavior"
 msgstr "Comportamento"
 
 #: src/lib/preferences/general/behaviorSettings.ts:18
+msgid "Paste on Copy"
+msgstr "Colar ao Copiar"
+
+#: src/lib/preferences/general/behaviorSettings.ts:19
+msgid ""
+"Automatically paste clipboard items when selected from clipboard history"
+msgstr ""
+"Colar automaticamente itens da área de transferência ao selecioná-los do "
+"histórico"
+
+#: src/lib/preferences/general/behaviorSettings.ts:24
 msgid "Remember Search Query"
 msgstr "Lembrar da consulta de pesquisa"
 
-#: src/lib/preferences/general/behaviorSettings.ts:19
+#: src/lib/preferences/general/behaviorSettings.ts:25
 msgid ""
 "Remember the search query when closing and reopening the clipboard dialog"
 msgstr ""
 "Lembrar a consulta de pesquisa ao fechar e reabrir o diálogo da área de "
 "transferência"
 
-#: src/lib/preferences/general/behaviorSettings.ts:24
+#: src/lib/preferences/general/behaviorSettings.ts:30
 msgid "Exclude Pinned Items from Main View"
 msgstr "Excluir itens marcados como favoritos da visualização principal"
 
-#: src/lib/preferences/general/behaviorSettings.ts:25
+#: src/lib/preferences/general/behaviorSettings.ts:31
 msgid "Pinned items appear only when searching for pinned items"
 msgstr "Itens fixados aparecem apenas ao pesquisar por itens fixados"
 
-#: src/lib/preferences/general/behaviorSettings.ts:30
+#: src/lib/preferences/general/behaviorSettings.ts:36
 msgid "Exclude Tagged Items from Main View"
 msgstr "Excluir itens marcados como favoritos da visualização principal"
 
-#: src/lib/preferences/general/behaviorSettings.ts:31
+#: src/lib/preferences/general/behaviorSettings.ts:37
 msgid "Tagged items appear only when searching for tagged items"
 msgstr "Itens marcados aparecem apenas ao pesquisar por itens marcados"
 
-#: src/lib/preferences/general/behaviorSettings.ts:36
+#: src/lib/preferences/general/behaviorSettings.ts:42
 msgid "Protect Pinned Items"
 msgstr "Proteger itens marcados como favoritos"
 
-#: src/lib/preferences/general/behaviorSettings.ts:37
+#: src/lib/preferences/general/behaviorSettings.ts:43
 msgid "Prevents pinned clipboard items from being deleted"
 msgstr "Impede que itens marcados como favoritos sejam excluídos"
 
-#: src/lib/preferences/general/behaviorSettings.ts:42
+#: src/lib/preferences/general/behaviorSettings.ts:48
 msgid "Protect Tagged Items"
 msgstr "Proteger itens marcados como favoritos"
 
-#: src/lib/preferences/general/behaviorSettings.ts:43
+#: src/lib/preferences/general/behaviorSettings.ts:49
 msgid "Prevents tagged clipboard items from being deleted"
 msgstr "Impede que itens marcados como favoritos sejam excluídos"
 
-#: src/lib/preferences/general/behaviorSettings.ts:48
+#: src/lib/preferences/general/behaviorSettings.ts:54
 msgid "Sync Primary Clipboard"
 msgstr "Sincronizar "
 
-#: src/lib/preferences/general/behaviorSettings.ts:49
+#: src/lib/preferences/general/behaviorSettings.ts:55
 msgid "Also copy clipboard items to the primary clipboard"
 msgstr "Também copiar itens copiados para a área de transferência primária"
 
-#: src/lib/preferences/general/behaviorSettings.ts:54
+#: src/lib/preferences/general/behaviorSettings.ts:60
 msgid "Update Date on Copy"
 msgstr "Atualizar Data ao Copiar"
 
-#: src/lib/preferences/general/behaviorSettings.ts:55
+#: src/lib/preferences/general/behaviorSettings.ts:61
 msgid ""
 "Update the copied date of clipboard items when selected from clipboard "
 "history"
@@ -1490,7 +1505,7 @@ msgstr ""
 "fazer logout ou desligar o sistema"
 
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:236
+#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:239
 #: src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "Limpar"
@@ -1613,23 +1628,23 @@ msgstr "Abrir Menu"
 msgid "Middle Click Action"
 msgstr "Ação do clique do meio"
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:67
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:73
 msgid "Swap Copy Shortcut"
 msgstr ""
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:68
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:74
 msgid "Swap copy and paste shortcuts"
 msgstr ""
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:72
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:79
 msgid "Paste Item"
 msgstr ""
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:74
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:81
 msgid "Copy Item"
 msgstr "Copiar Item"
 
-#: src/lib/preferences/shortcuts/itemShortcuts.ts:76
+#: src/lib/preferences/shortcuts/itemShortcuts.ts:83
 msgid "Activate Default Action"
 msgstr "Ativar ação padrão"
 
@@ -1729,47 +1744,47 @@ msgstr "Desativar Atalho"
 msgid "Disabled"
 msgstr "Desabilitado"
 
-#: src/lib/ui/components/contentInfo.ts:32
+#: src/lib/ui/components/contentInfo.ts:31
 #, javascript-format
 msgid "%dh"
 msgstr "%dh"
 
-#: src/lib/ui/components/contentInfo.ts:33
+#: src/lib/ui/components/contentInfo.ts:32
 #, javascript-format
 msgid "%dm"
 msgstr "%dm"
 
-#: src/lib/ui/components/contentInfo.ts:34
+#: src/lib/ui/components/contentInfo.ts:33
 #, javascript-format
 msgid "%ds"
 msgstr "%ds"
 
-#: src/lib/ui/components/contentInfo.ts:114
+#: src/lib/ui/components/contentInfo.ts:113
 #, javascript-format
 msgid "%d char"
 msgid_plural "%d chars"
 msgstr[0] "%d caractere"
 msgstr[1] "%d caracteres"
 
-#: src/lib/ui/components/contentInfo.ts:122
+#: src/lib/ui/components/contentInfo.ts:121
 #, javascript-format
 msgid "%d word"
 msgid_plural "%d words"
 msgstr[0] "%d palavra"
 msgstr[1] "%d palavras"
 
-#: src/lib/ui/components/contentInfo.ts:125
+#: src/lib/ui/components/contentInfo.ts:124
 #, javascript-format
 msgid "%d line"
 msgid_plural "%d lines"
 msgstr[0] "%d linha"
 msgstr[1] "%d linhas"
 
-#: src/lib/ui/components/contentInfo.ts:185
+#: src/lib/ui/components/contentInfo.ts:184
 msgid "Missing File"
 msgstr "Arquivo faltando"
 
-#: src/lib/ui/components/contentInfo.ts:197
+#: src/lib/ui/components/contentInfo.ts:196
 msgid "Error"
 msgstr "Erro"
 
@@ -1805,7 +1820,7 @@ msgstr "Limpar Histórico"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/lib/ui/indicator.ts:199
+#: src/lib/ui/indicator.ts:195
 #, javascript-format
 msgid "%d File"
 msgid_plural "%d Files"
@@ -1846,43 +1861,43 @@ msgstr "Área de Transferência Vazia"
 msgid "No Items Found"
 msgstr "Nenhum item encontrado"
 
-#: src/lib/ui/searchEntry.ts:153
+#: src/lib/ui/searchEntry.ts:164
 msgid "__All"
 msgstr "__Tudo"
 
-#: src/lib/ui/searchEntry.ts:157
+#: src/lib/ui/searchEntry.ts:168
 msgid "__Text"
 msgstr "__Texto"
 
-#: src/lib/ui/searchEntry.ts:158
+#: src/lib/ui/searchEntry.ts:169
 msgid "__Code"
 msgstr "__Código"
 
-#: src/lib/ui/searchEntry.ts:159
+#: src/lib/ui/searchEntry.ts:170
 msgid "__Image"
 msgstr "__Imagem"
 
-#: src/lib/ui/searchEntry.ts:160
+#: src/lib/ui/searchEntry.ts:171
 msgid "__File"
 msgstr "__Arquivo"
 
-#: src/lib/ui/searchEntry.ts:161
+#: src/lib/ui/searchEntry.ts:172
 msgid "File__s"
 msgstr "Arquivos__s"
 
-#: src/lib/ui/searchEntry.ts:162
+#: src/lib/ui/searchEntry.ts:173
 msgid "__Link"
 msgstr "__Link"
 
-#: src/lib/ui/searchEntry.ts:163
+#: src/lib/ui/searchEntry.ts:174
 msgid "C__haracter"
 msgstr "C__ractere"
 
-#: src/lib/ui/searchEntry.ts:164
+#: src/lib/ui/searchEntry.ts:175
 msgid "Colo__r"
 msgstr "Co__r"
 
-#: src/lib/ui/searchEntry.ts:278
+#: src/lib/ui/searchEntry.ts:290
 msgid "Type to search"
 msgstr "Digite para pesquisar"
 
@@ -1898,17 +1913,8 @@ msgstr "Customização"
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#~ msgid ""
-#~ "Automatically paste clipboard items when selected from clipboard history"
-#~ msgstr ""
-#~ "Colar automaticamente itens da área de transferência ao selecioná-los do "
-#~ "histórico"
-
 #~ msgid "Failed to load database"
 #~ msgstr "Falha ao carregar banco de dados"
-
-#~ msgid "Paste on Copy"
-#~ msgstr "Colar ao Copiar"
 
 #~ msgid "Set the color scheme of the custom theme"
 #~ msgstr "Seleciona o esquema de cor do tema customizado"
